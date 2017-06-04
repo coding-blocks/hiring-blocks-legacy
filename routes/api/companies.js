@@ -17,6 +17,7 @@ router.post('/add', function (req, res) {
     })
 });
 
+
 router.get('/:id', function (req, res) {
     let companyId = parseInt(req.params.id);
     models.Company.findOne({

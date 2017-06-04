@@ -50,15 +50,17 @@ router.post('/:id/edit', function (req, res) {
         projects: projects,
         trainings: trainings
     }, {
-        where: {id: studentId}
-    }).then(function (student) {
+        where: {id: studentId},
+        returning: true
+    }).then(function (rows) {
+        const student=rows[1][0].get();
         res.send(student);
     }).catch(function (error) {
         console.error(error)
     });
 });
 
-router.post('/:id/applications', function (req, res) {
+router.get('/:id/applications', function (req, res) {
     let studentId = parseInt(req.params.id);
     models.Application.findAll({
         where: {studentId: studentId},
