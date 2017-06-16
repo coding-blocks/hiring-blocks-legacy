@@ -8,8 +8,7 @@ const db = new Sequelize('hb', 'cbuser', 'cbpass', {
 
 const Student = db.define('student', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    firstname: Sequelize.STRING,
-    lastname: Sequelize.STRING,
+    name: Sequelize.STRING,
     email: Sequelize.STRING,
     contact: Sequelize.BIGINT,
     pincode: Sequelize.INTEGER,

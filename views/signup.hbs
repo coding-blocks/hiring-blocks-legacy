@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+<h3>Register as a {{role}}</h3>
+<form method="post" action="/signup/{{role}}">
+    <input type="text" placeholder="name" name="name"><br>
+    <input type="email" placeholder="email" name="email"><br>
+    <input type="password" placeholder="password" name="password"><br>
+    {{#if isAdmin}}
+    <input type="password" placeholder="secret" name="secret"><br>
+    {{/if}}
+    <input type="submit" value="Sign Up">
+</form>
+
+</body>
+</html>

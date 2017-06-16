@@ -1,10 +1,10 @@
 
-function ensureLogin() {
+function ensureLogin(fallbackPath) {
 
     return function (req, res, next) {
 
         if (!req.user) {
-            res.redirect('http://localhost:4000/');
+            res.redirect(fallbackPath)
         } else {
             next();
         }
@@ -12,25 +12,25 @@ function ensureLogin() {
 }
 
 
-function ensureCompany() {
+function ensureCompany(fallbackPath) {
 
     return function (req, res, next) {
 
         if (req.user && req.user.role === 'Company') {
             next()
         } else {
-            res.send({success:'false',url:'http://localhost:4000/',message:"Companies Only"});
+            res.redirect(fallbackPath);
         }
     }
 }
 
-function ensureAdmin() {
+function ensureAdmin(fallbackPath) {
     return function (req, res, next) {
 
         if (req.user && req.user.role === 'Admin') {
             next();
         } else {
-            res.send({success:'false',url:'http://localhost:4000/',message:"Admin Only"});
+            res.redirect(fallbackPath);
         }
     }
 }

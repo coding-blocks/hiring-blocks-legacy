@@ -1,20 +1,21 @@
 const express = require('express')
     , bodyParser = require('body-parser')
     , session = require('express-session')
-    , passport = require('./passport/passporthandler')
-    , path = require('path')
+    , passport = require('./auth/passporthandler')
     , cookieParser = require('cookie-parser')
     , secrets = require('./secrets.json');
 
 const app = express();
 const apirouter = require('./routes/api')
-    , loginrouter = require('./routers/login')
-    , logoutrouter = require('./routers/logout')
-    , signuprouter = require('./routers/signup')
-    , authorizerouter = require('./routers/authorize');
+    , loginrouter = require('./routes/login')
+    , logoutrouter = require('./routes/logout')
+    , signuprouter = require('./routes/signup')
+    , authorizerouter = require('./routes/authorize')
+    , profilerouter = require('./routes/profile');
 
-const ensure = require('./passport/passportutils');
+const ensure = require('./auth/authutils');
 
+app.set("view engine", 'hbs');
 
 app.use(cookieParser(secrets.EXPRESS_SESSIONS_SECRET));
 app.use(bodyParser.json());
@@ -31,9 +32,9 @@ app.use(passport.session());
 
 app.use('/signup', signuprouter);
 app.use('/login', loginrouter);
-app.use('/logout', logoutrouter);
-app.use('/authorize', authorizerouter);
-
+app.use('/profile', profilerouter);
+// app.use('/logout', logoutrouter);
+// app.use('/authorize', authorizerouter);
 
 
 app.use('/api', apirouter);

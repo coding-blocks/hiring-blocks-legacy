@@ -1,4 +1,5 @@
 const passport = require('passport');
+const models = require('./../db/models').models;
 
 const localStudentStrategy = require('./strategies/local/student');
 const localCompanyStrategy = require('./strategies/local/company');
