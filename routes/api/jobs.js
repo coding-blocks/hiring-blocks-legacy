@@ -6,7 +6,7 @@ router.post('/add', function (req, res) {
     models.Job.create({
         title: req.body.title,
         description: req.body.description,
-        skills: req.body.skills,
+        skills: req.body.skills.split(','),
         jobType: req.body.jobType,
         location: req.body.location,
         stipend: req.body.stipend,
@@ -49,7 +49,7 @@ router.post('/:id/apply', function (req, res) {
 
 router.get('/', function (req, res) {
     models.Job.findAll({
-        where: {jobType: req.query.status}
+        //where: {jobType: req.query.status}
     }).then(function (jobs) {
         res.send(jobs);
     }).catch(function (err) {

@@ -31,12 +31,12 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/:id/edit', function (req, res) {
-    let companyId = parseInt(req.params.id);
-    email = req.body.email;
-    website = req.body.website;
-    locations = req.body.locations;
-    skills = req.body.skills;
-    repName = req.body.repName;
+    let companyId = parseInt(req.params.id),
+    email = req.body.email,
+    website = req.body.website,
+    locations = req.body.locations.split(','),
+    skills = req.body.skills.split(','),
+    repName = req.body.repName,
     repNumber = req.body.repNumber;
 
     models.Company.update({

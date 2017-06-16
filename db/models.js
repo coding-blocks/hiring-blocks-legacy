@@ -11,7 +11,6 @@ const Student = db.define('student', {
     firstname: Sequelize.STRING,
     lastname: Sequelize.STRING,
     email: Sequelize.STRING,
-    password: Sequelize.STRING,
     contact: Sequelize.BIGINT,
     pincode: Sequelize.INTEGER,
     education: Sequelize.JSON,
@@ -20,7 +19,14 @@ const Student = db.define('student', {
     projects: Sequelize.JSON,
     trainings: Sequelize.JSON,
     cbStudent: {type: Sequelize.BOOLEAN, defaultValue: false},
-    cbCourses: Sequelize.ARRAY(Sequelize.STRING)
+    cbCourses: Sequelize.ARRAY(Sequelize.STRING),
+    role: {type: Sequelize.STRING, defaultValue: 'Student'}
+});
+
+const StudentLocal = db.define('studentlocal', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    email: Sequelize.STRING,
+    password: Sequelize.STRING
 });
 
 const Company = db.define('company', {
@@ -33,6 +39,21 @@ const Company = db.define('company', {
     skills: Sequelize.ARRAY(Sequelize.STRING),
     repName: Sequelize.STRING,
     repNumber: Sequelize.BIGINT,
+    role: {type: Sequelize.STRING, defaultValue: 'Company'}
+});
+
+const CompanyLocal = db.define('companylocal', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    email: Sequelize.STRING,
+    password: Sequelize.STRING
+});
+
+const Admin = db.define('admin', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    email: Sequelize.STRING,
+    password: Sequelize.STRING,
+    name: Sequelize.STRING,
+    role: {type: Sequelize.STRING, defaultValue: 'Admin'}
 });
 
 const Job = db.define("job", {
@@ -55,6 +76,43 @@ const Application = db.define('application', {
     app: Sequelize.STRING
 });
 
+const AuthStudent = db.define('authstudent', {
+    token: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    }
+});
+
+const AuthCompany = db.define('authcompany', {
+    token: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    }
+});
+
+const AuthAdmin = db.define('authadmin', {
+    token: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    }
+});
+
+
+StudentLocal.belongsTo(Student);
+Student.hasOne(StudentLocal);
+
+CompanyLocal.belongsTo(Company);
+Company.hasOne(CompanyLocal);
+
+AuthStudent.belongsTo(Student);
+Student.hasMany(AuthStudent);
+
+AuthCompany.belongsTo(Company);
+Company.hasMany(AuthCompany);
+
+AuthAdmin.belongsTo(Admin);
+Admin.hasMany(AuthAdmin);
+
 Job.belongsTo(Company);
 Company.hasMany(Job);
 
@@ -69,5 +127,7 @@ db.sync({}).then(() => {
 });
 
 module.exports = {
-    models: {Student, Company, Application, Job}
+    models: {
+        Student, StudentLocal, Company, CompanyLocal, Admin, AuthStudent, AuthCompany, AuthAdmin, Application, Job,
+    }
 };

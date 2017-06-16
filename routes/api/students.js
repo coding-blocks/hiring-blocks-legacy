@@ -14,6 +14,9 @@ router.post('/add', function (req, res) {
             password: hash
         }).then(function (student) {
             res.send(student);
+        }).catch(function (err) {
+            console.log(err);
+            res.send("Could not create the student.");
         })
     })
 });
@@ -30,30 +33,35 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/:id/edit', function (req, res) {
-    let studentId = parseInt(req.params.id);
-    email = req.body.email;
-    contact = req.body.contact;
-    pincode = req.body.pincode;
-    education = req.body.education;
-    skills = req.body.skills;
-    languages = req.body.languages;
-    projects = req.body.projects;
-    trainings = req.body.trainings;
+    let studentId = parseInt(req.params.id),
+        email = req.body.email,
+        contact = req.body.contact,
+        pincode = req.body.pincode,
+        education = req.body.education,
+        skills = req.body.skills.split(','),
+        languages = req.body.languages.split(','),
+        projects = req.body.projects,
+        trainings = req.body.trainings,
+        cbStudent = req.body.cbStudent,
+        cbCourses = req.body.cbCourses.split(',');
+    console.log(JSON.parse(education));
 
     models.Student.update({
         email: email,
         contact: contact,
         pincode: pincode,
-        education: education,
+        education: JSON.parse(education),
         skills: skills,
         languages: languages,
-        projects: projects,
-        trainings: trainings
+        projects: JSON.parse(projects),
+        trainings: JSON.parse(trainings),
+        cbStudent:cbStudent,
+        cbCourses:cbCourses
     }, {
         where: {id: studentId},
         returning: true
     }).then(function (rows) {
-        const student=rows[1][0].get();
+        const student = rows[1][0].get();
         res.send(student);
     }).catch(function (error) {
         console.error(error)
