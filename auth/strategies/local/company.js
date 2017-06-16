@@ -9,27 +9,25 @@ module.exports = new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, function (email, password, done) {
-    models.CompanyLocal.findOne({
-        where: {email: email},
-        include: models.Tutor
-    }).then(function (companylocal) {
-        if(!companylocal)
-            return done(null, false, {message: 'Incorrect email'});
-        passutils.compare2hash(password, companylocal.password).then(function (match) {
-            if (match) {
-                // TODO: Check if get or not
-                return done(null, companylocal.tutor);
+    passutils.pass2hash(password).then(function (hash) {
+        models.CompanyLocal.findOne({
+            where: {email: email},
+            include: models.Company
+        }).then(function (companylocal) {
+            if (!companylocal)
+                return done(null, false, {message: 'Incorrect email'});
+            if (companylocal.password === hash) {
+                return done(null, companylocal.company);
             } else {
                 return done(null, false, {message: 'Incorrect password'});
             }
         }).catch(function (err) {
             console.log(err);
-            return done(err, false, {message: err})
+            return done(err, false, {message: 'invalid user'});
         });
-
-    }).catch(function (err) {
+    }).catch(function () {
         console.log(err);
-        return done(err,false,{message: 'invalid tutor'});
+        res.send({success: 'error'});
     });
 
 });

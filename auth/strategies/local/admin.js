@@ -9,27 +9,25 @@ module.exports = new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, function (email, password, done) {
-    models.Admin.findOne({
-        where: {email: email},
-    }).then(function (admin) {
-        if(!admin)
-            return done(null, false, {message: 'Incorrect email'});
-        passutils.compare2hash(password, admin.password).then(function (match) {
-            if (match) {
-                // TODO: Check if get or not
-                return done(null, admin);
+    passutils.pass2hash(password).then(function (hash) {
+        models.Admin.findOne({
+            where: {email: email}
+        }).then(function (adminLocal) {
+            if (!adminLocal)
+                return done(null, false, {message: 'Incorrect email'});
+            if (adminLocal.password === hash) {
+                delete adminLocal.password;
+                return done(null, adminLocal);
             } else {
                 return done(null, false, {message: 'Incorrect password'});
             }
         }).catch(function (err) {
             console.log(err);
-            return done(err, false, {message: err})
+            return done(err, false, {message: 'invalid user'});
         });
-
-    }).catch(function (err) {
+    }).catch(function () {
         console.log(err);
-        return done(err,false,{message: 'invalid admin'});
+        res.send({success: 'error'});
     });
-
 });
 
