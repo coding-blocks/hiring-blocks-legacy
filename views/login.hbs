@@ -5,12 +5,13 @@
     <title>Signup</title>
 </head>
 <body>
+<h3>{{role}}</h3>
 
-<form method="post" action="/login">
-    <input type="text" placeholder="username" name="username"><br>
+<form method="post" action="/login/{{role}}">
+    <input type="email" placeholder="email" name="email"><br>
     <input type="password" placeholder="password" name="password"><br>
     <input type="submit" value="Sign In">
-    <input type="submit" formaction="/authorize" value="Get Token">
+    <input type="submit" formaction="/authorize/{{role}}" value="Get Token">
 </form>
 
 Don't have account ?
