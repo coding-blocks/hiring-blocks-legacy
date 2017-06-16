@@ -6,6 +6,7 @@
 
 Return details of all the users.
 Sample JSON
+```js
 [
   {
     "id": 1,
@@ -47,10 +48,15 @@ Sample JSON
   }
 ]
 
+```
+
+
 ### GET `/api/students/:id`
 
 Return details of the specific user.
 Sample JSON
+
+```js
 {
   "id": 1,
   "firstname": "Apoorvaa",
@@ -90,10 +96,14 @@ Sample JSON
   "updatedAt": "2017-06-05T15:46:53.170Z"
 }
 
+```
+
 ### GET `/api/students/:id/applications`
 
 Return details of all the applications submitted by the specific user.
 Sample JSON
+
+```js
 [
   {
     "id": 2,
@@ -126,11 +136,14 @@ Sample JSON
     }
   }
 ]
+```
+
 
 ### POST `/api/students/add`
 
 Add a new user and Return details of the user.
 Sample JSON
+```js
 {
   "cbStudent": false,
   "id": 1,
@@ -149,11 +162,13 @@ Sample JSON
   "trainings": null,
   "cbCourses": null
 }
+```
 
 ### POST `/api/students/:id/edit`
 
 Edit a specific user and Return details of the updated user.
 Sample JSON
+```js
 {
   "id": 1,
   "firstname": "Apoorvaa",
@@ -192,6 +207,7 @@ Sample JSON
   "createdAt": "2017-06-05T15:09:07.168Z",
   "updatedAt": "2017-06-05T15:46:53.170Z"
 }
+```
 
 ## `/api/companies`
 
@@ -199,6 +215,7 @@ Sample JSON
 
 Return details of all the companies.
 Sample JSON
+```js
 [
   {
     "id": 1,
@@ -238,11 +255,13 @@ Sample JSON
     "updatedAt": "2017-06-04T19:11:09.479Z"
   }
 ]
+```
 
 ### GET `/api/companies/:id`
 
 Return details of the specific company.
 Sample JSON
+```js
 {
   "id": 2,
   "name": "Coding Blocks",
@@ -267,11 +286,13 @@ Sample JSON
   "createdAt": "2017-06-04T18:49:54.714Z",
   "updatedAt": "2017-06-04T19:11:09.479Z"
 }
+```
 
 ### GET `/api/companies/:id/jobs`
 
 Return details of all the jobs created by the specific company.
 Sample JSON
+```js
 [
   {
     "id": 4,
@@ -311,11 +332,13 @@ Sample JSON
         "companyId": 2
       }
 ]
+```
 
 ### GET `/api/companies/:id/applications`
 
 Return details of all the applications for the jobs of the specific company.
 Sample JSON
+```js
 [
   {
     "id": 1,
@@ -386,11 +409,13 @@ Sample JSON
     }
   }
 ]
+```
 
 ### POST `/api/companies/add`
 
 Add a new company and Return details of the user.
 Sample JSON:
+```js
 {
   "id": 2,
   "name": "Coding Blocks",
@@ -404,11 +429,13 @@ Sample JSON:
   "repName": null,
   "repNumber": null
 }
+```
 
 ### POST `/api/companies/:id/edit`
 
 Edit a specific company and Return details of the updated company.
 Sample JSON
+```js
 {
   "id": 2,
   "name": "Coding Blocks",
@@ -433,6 +460,7 @@ Sample JSON
   "createdAt": "2017-06-04T18:49:54.714Z",
   "updatedAt": "2017-06-04T19:11:09.479Z"
 }
+```
 
 ## `/api/jobs`
 
@@ -440,6 +468,7 @@ Sample JSON
 
 Return details of all the jobs.
 Sample JSON
+```js
 [
   {
     "id": 3,
@@ -495,11 +524,13 @@ Sample JSON
     "companyId": 2
   }
 ]
+```
 
 ### GET `/api/jobs/:id`
 
 Return details of the specific job.
 Sample JSON
+```js
 {
   "id": 4,
   "title": "Summer Intern",
@@ -520,11 +551,13 @@ Sample JSON
   "updatedAt": "2017-06-04T19:21:10.929Z",
   "createdAt": "2017-06-04T19:21:10.929Z"
 }
+```
 
 ### POST `/api/jobs/add`
 
 Add a new job and Return details of the job.
 Sample JSON
+```js
 {
   "id": 4,
   "title": "Summer Intern",
@@ -545,11 +578,13 @@ Sample JSON
   "updatedAt": "2017-06-04T19:21:10.929Z",
   "createdAt": "2017-06-04T19:21:10.929Z"
 }
+```
 
 ### POST `/api/jobs/:id/apply`
 
 Apply for a specific job and Return details of the application.
 Sample JSON
+```js
 {
   "id": 2,
   "app": "Apply for the position of full stack Web Developer Intern",
@@ -560,3 +595,4 @@ Sample JSON
   "createdAt": "2017-06-05T16:45:35.190Z",
   "date": null
 }
+```
