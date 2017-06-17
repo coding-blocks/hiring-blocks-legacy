@@ -25,6 +25,8 @@ route.post('/student', (req, res) => {
         res.send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
+        console.log(password);
+        console.log(hash);
         models.StudentLocal.create({
             email: req.body.email,
             password: hash,
@@ -58,7 +60,7 @@ route.post('/company', (req, res) => {
         models.CompanyLocal.create({
             email: req.body.email,
             password: hash,
-            student: {
+            company: {
                 name: req.body.name,
                 email: req.body.email
             }

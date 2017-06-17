@@ -34,7 +34,7 @@ app.use('/signup', signuprouter);
 app.use('/login', loginrouter);
 app.use('/profile', profilerouter);
 app.use('/logout', logoutrouter);
-// app.use('/authorize', authorizerouter);
+app.use('/authorize', authorizerouter);
 
 
 app.use('/api', apirouter);
