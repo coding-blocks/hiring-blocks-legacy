@@ -16,7 +16,7 @@ module.exports = new LocalStrategy({
         if (!studentLocal) {
             return done(null, false, {message: 'Incorrect email'});
         } else {
-            password.compare2hash(password, studentLocal.password).then(function (match) {
+            passutils.compare2hash(password, studentLocal.password).then(function (match) {
                 if (match) {
                     console.log(2);
                     return done(null, studentLocal.student);
@@ -31,6 +31,6 @@ module.exports = new LocalStrategy({
         }
     }).catch(function (err) {
         console.log(err);
-        res.send({success: 'error'});
+        done(err);
     });
 });

@@ -1,6 +1,6 @@
 const route = require('express').Router();
 
-route.get('/logout', (req, res) => {
+route.get('/', (req, res) => {
     req.user = null;
     req.logout();
     req.session.destroy(() => {
