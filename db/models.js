@@ -8,47 +8,69 @@ const db = new Sequelize('hb', 'cbuser', 'cbpass', {
 
 const Student = db.define('student', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    name: Sequelize.STRING,
-    email: Sequelize.STRING,
-    contact: Sequelize.BIGINT,
-    pincode: Sequelize.INTEGER,
-    education: Sequelize.JSON,
-    skills: Sequelize.ARRAY(Sequelize.STRING),
-    languages: Sequelize.ARRAY(Sequelize.STRING),
-    projects: Sequelize.JSON,
-    trainings: Sequelize.JSON,
+    education: Sequelize.ARRAY(Sequelize.JSON),
+    skills: Sequelize.ARRAY(Sequelize.JSON),
+    compLanguages: Sequelize.ARRAY(Sequelize.JSON),
+    projects: Sequelize.ARRAY(Sequelize.JSON),
+    trainings: Sequelize.ARRAY(Sequelize.JSON),
     cbStudent: {type: Sequelize.BOOLEAN, defaultValue: false},
     cbCourses: Sequelize.ARRAY(Sequelize.STRING),
-    role: {type: Sequelize.STRING, defaultValue: 'Student'}
 });
 
-const Company = db.define('company', {
+const CompanyManager = db.define('companymanager', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    designation: Sequelize.STRING,
+});
+
+
+const Admin = db.define('admin', {
+    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+    cbCentre: Sequelize.STRING,
+    cbDesignation: Sequelize.STRING
+});
+
+const User = db.define('user', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     name: Sequelize.STRING,
+    contact: Sequelize.STRING,
     email: Sequelize.STRING,
-    password: Sequelize.STRING,
-    website: Sequelize.STRING,
-    locations: Sequelize.ARRAY(Sequelize.STRING),
-    skills: Sequelize.ARRAY(Sequelize.STRING),
-    repName: Sequelize.STRING,
-    repNumber: Sequelize.BIGINT,
-    role: {type: Sequelize.STRING, defaultValue: 'Company'}
+    pincode: Sequelize.INTEGER,
+    role: {
+        type: Sequelize.ENUM,
+        values: ['student', 'company', 'admin']
+    }
 });
 
 const UserLocal = db.define('userlocal', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    email: Sequelize.STRING,
     password: Sequelize.STRING,
+});
+
+const AuthToken = db.define('authtokens', {
+    token: {
+        type: Sequelize.STRING,
+        primaryKey: true
+    },
     role: Sequelize.STRING
 });
 
-const Admin = db.define('admin', {
-    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    email: Sequelize.STRING,
-    password: Sequelize.STRING,
+UserLocal.belongsTo(User); User.hasOne(UserLocal);
+AuthToken.belongsTo(User); User.hasMany(AuthToken);
+
+Student.belongsTo(User); User.hasOne(Student);
+CompanyManager.belongsTo(User); User.hasOne(CompanyManager);
+Admin.belongsTo(User); User.hasOne(Admin);
+
+
+const Company = db.define('company', {
     name: Sequelize.STRING,
-    role: {type: Sequelize.STRING, defaultValue: 'Admin'}
+    website: Sequelize.STRING,
+    locations: Sequelize.ARRAY(Sequelize.STRING),
+    skills: Sequelize.ARRAY(Sequelize.STRING),
+    contactEmail: Sequelize.STRING,
+    contactNumber: Sequelize.STRING,
 });
+
 
 const Job = db.define("job", {
     id: {type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true},
@@ -70,31 +92,9 @@ const Application = db.define('application', {
     app: Sequelize.STRING
 });
 
-const Auth = db.define('authorization', {
-    token: {
-        type: Sequelize.STRING,
-        primaryKey: true
-    },
-    role: Sequelize.STRING
-});
+CompanyManager.belongsTo(Company);
+Company.hasMany(CompanyManager);
 
-UserLocal.belongsTo(Student);
-Student.hasOne(UserLocal);
-
-UserLocal.belongsTo(Company);
-Company.hasOne(UserLocal);
-
-UserLocal.belongsTo(Admin);
-Admin.hasOne(UserLocal);
-
-Auth.belongsTo(Student);
-Student.hasMany(Auth);
-
-Auth.belongsTo(Company);
-Company.hasMany(Auth);
-
-Auth.belongsTo(Admin);
-Admin.hasMany(Auth);
 
 Job.belongsTo(Company);
 Company.hasMany(Job);
@@ -105,12 +105,15 @@ Student.hasMany(Application);
 Application.belongsTo(Job);
 Job.hasMany(Application);
 
+
+
 db.sync({}).then(() => {
     console.log('Database configured')
 });
 
 module.exports = {
     models: {
-        Student, Company, UserLocal, Admin, Auth, Application, Job,
+        Student, CompanyManager, Admin, User, UserLocal, AuthToken,
+        Company, Job, Application
     }
 };
