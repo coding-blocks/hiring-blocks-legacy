@@ -35,10 +35,6 @@ const User = db.define('user', {
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
     pincode: Sequelize.INTEGER,
-    role: {
-        type: Sequelize.ENUM,
-        values: ['student', 'company', 'admin']
-    }
 });
 
 const UserLocal = db.define('userlocal', {

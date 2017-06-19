@@ -12,11 +12,12 @@ function ensureLogin(fallbackPath) {
 }
 
 
-function ensureCompany(fallbackPath) {
+
+function ensureCompanyManager(fallbackPath) {
 
     return function (req, res, next) {
 
-        if (req.user && req.user.role === 'Company') {
+        if (req.user && req.user.companymanager) {
             next()
         } else {
             res.redirect(fallbackPath);
@@ -27,7 +28,18 @@ function ensureCompany(fallbackPath) {
 function ensureAdmin(fallbackPath) {
     return function (req, res, next) {
 
-        if (req.user && req.user.role === 'Admin') {
+        if (req.user && req.user.admin) {
+            next();
+        } else {
+            res.redirect(fallbackPath);
+        }
+    }
+}
+
+function ensureStudent(fallbackPath) {
+    return function (req, res, next) {
+
+        if (req.user && req.user.student) {
             next();
         } else {
             res.redirect(fallbackPath);
