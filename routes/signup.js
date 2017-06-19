@@ -27,9 +27,12 @@ route.post('/student', (req, res) => {
     password.pass2hash(req.body.password).then(function (hash) {
         console.log(password);
         console.log(hash);
-        models.StudentLocal.create({
+        models.UserLocal.create({
             email: req.body.email,
             password: hash,
+            role: "Student",
+            companyId: 0,
+            adminId: 0,
             student: {
                 name: req.body.name,
                 email: req.body.email
@@ -57,9 +60,12 @@ route.post('/company', (req, res) => {
         res.send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
-        models.CompanyLocal.create({
+        models.UserLocal.create({
             email: req.body.email,
             password: hash,
+            role: "Company",
+            studentId: 0,
+            adminId: 0,
             company: {
                 name: req.body.name,
                 email: req.body.email
@@ -83,18 +89,22 @@ route.post('/company', (req, res) => {
 });
 
 route.post('/admin', (req, res) => {
-    if (req.body.secret !== secret.ADMIN_SECRET) {
-        res.send("Not Allowed");
-    }
-
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
         res.send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
-        models.Admin.create({
+        models.UserLocal.create({
             email: req.body.email,
             password: hash,
-            name: req.body.name
+            role: "Admin",
+            studentId: 0,
+            companyId: 0,
+            admin: {
+                name: req.body.name,
+                email: req.body.email
+            }
+        }, {
+            include: [models.Admin]
         }).then(function (adminLocal) {
             if (adminLocal) {
                 res.send({success: 'true'});

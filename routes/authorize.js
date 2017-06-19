@@ -4,108 +4,23 @@ const uid = require('uid2');
 const password = require('../utils/password');
 
 
-route.post('/student', (req, res) => {
+route.post('/', (req, res) => {
     console.log(1);
-    models.StudentLocal.findOne({
+    models.UserLocal.findOne({
         where: {
             email: req.body.email,
         },
-        include: [models.Student]
-    }).then(function (studentLocal) {
-        if (studentLocal) {
-            password.compare2hash(req.body.password, studentLocal.password).then(function (match) {
+        include: [models.Student, models.Company, models.Admin]
+    }).then(function (userLocal) {
+        if (userLocal) {
+            password.compare2hash(req.body.password, userLocal.password).then(function (match) {
                 if (match) {
-                    models.AuthStudent.create({
+                    models.Auth.create({
                         token: uid(30),
-                        studentId: studentLocal.student.id
-                    }).then(function (authToken) {
-                        console.log(4);
-                        res.send({
-                            success: 'true',
-                            token: authToken.token
-                        })
-                    }).catch(function (err) {
-                        console.log(5);
-                        console.log(err);
-                        res.send({success: 'false'})
-                    })
-                } else {
-                    res.send({success: 'false', message: 'Incorrect Password'})
-                }
-            }).catch(function (err) {
-                console.log(err);
-                res.send({success: 'false'})
-            })
-        } else {
-            res.send({
-                success: 'false', message: 'Incorrect Email'
-            })
-        }
-    }).catch(function (err) {
-        console.log(err);
-        res.send({success: 'false'})
-    })
-});
-
-
-route.post('/company', (req, res) => {
-    console.log(1);
-    models.CompanyLocal.findOne({
-        where: {
-            email: req.body.email,
-        },
-        include: [models.Company]
-    }).then(function (companyLocal) {
-        console.log(companyLocal);
-        if (companyLocal) {
-            password.compare2hash(req.body.password, companyLocal.password).then(function (match) {
-                if (match) {
-                    models.AuthCompany.create({
-                        token: uid(30),
-                        companyId: companyLocal.company.id
-                    }).then(function (authToken) {
-                        console.log(4);
-                        res.send({
-                            success: 'true',
-                            token: authToken.token
-                        })
-                    }).catch(function (err) {
-                        console.log(5);
-                        console.log(err);
-                        res.send({success: 'false'})
-                    })
-                } else {
-                    res.send({success: 'false', message: 'Incorrect Password'})
-                }
-            }).catch(function (err) {
-                console.log(err);
-                res.send({success: 'false'})
-            })
-        } else {
-            res.send({
-                success: 'false', message: 'Incorrect Email'
-            })
-        }
-    }).catch(function (err) {
-        console.log(err);
-        res.send({success: 'false'})
-    })
-});
-
-
-route.post('/admin', (req, res) => {
-    console.log(1);
-    models.Admin.findOne({
-        where: {
-            email: req.body.email,
-        }
-    }).then(function (admin) {
-        if (admin) {
-            password.compare2hash(req.body.password, admin.password).then(function (match) {
-                if (match) {
-                    models.AuthAdmin.create({
-                        token: uid(30),
-                        adminId: admin.id
+                        role: userLocal.role,
+                        studentId: userLocal.student.id,
+                        companyId: userLocal.companyId,
+                        adminId: userLocal.adminId
                     }).then(function (authToken) {
                         console.log(4);
                         res.send({

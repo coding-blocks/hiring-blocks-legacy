@@ -22,12 +22,6 @@ const Student = db.define('student', {
     role: {type: Sequelize.STRING, defaultValue: 'Student'}
 });
 
-const StudentLocal = db.define('studentlocal', {
-    id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-    email: Sequelize.STRING,
-    password: Sequelize.STRING
-});
-
 const Company = db.define('company', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     name: Sequelize.STRING,
@@ -41,10 +35,11 @@ const Company = db.define('company', {
     role: {type: Sequelize.STRING, defaultValue: 'Company'}
 });
 
-const CompanyLocal = db.define('companylocal', {
+const UserLocal = db.define('userlocal', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     email: Sequelize.STRING,
-    password: Sequelize.STRING
+    password: Sequelize.STRING,
+    role: Sequelize.STRING
 });
 
 const Admin = db.define('admin', {
@@ -75,42 +70,31 @@ const Application = db.define('application', {
     app: Sequelize.STRING
 });
 
-const AuthStudent = db.define('authstudent', {
+const Auth = db.define('authorization', {
     token: {
         type: Sequelize.STRING,
         primaryKey: true
-    }
+    },
+    role: Sequelize.STRING
 });
 
-const AuthCompany = db.define('authcompany', {
-    token: {
-        type: Sequelize.STRING,
-        primaryKey: true
-    }
-});
+UserLocal.belongsTo(Student);
+Student.hasOne(UserLocal);
 
-const AuthAdmin = db.define('authadmin', {
-    token: {
-        type: Sequelize.STRING,
-        primaryKey: true
-    }
-});
+UserLocal.belongsTo(Company);
+Company.hasOne(UserLocal);
 
+UserLocal.belongsTo(Admin);
+Admin.hasOne(UserLocal);
 
-StudentLocal.belongsTo(Student);
-Student.hasOne(StudentLocal);
+Auth.belongsTo(Student);
+Student.hasMany(Auth);
 
-CompanyLocal.belongsTo(Company);
-Company.hasOne(CompanyLocal);
+Auth.belongsTo(Company);
+Company.hasMany(Auth);
 
-AuthStudent.belongsTo(Student);
-Student.hasMany(AuthStudent);
-
-AuthCompany.belongsTo(Company);
-Company.hasMany(AuthCompany);
-
-AuthAdmin.belongsTo(Admin);
-Admin.hasMany(AuthAdmin);
+Auth.belongsTo(Admin);
+Admin.hasMany(Auth);
 
 Job.belongsTo(Company);
 Company.hasMany(Job);
@@ -127,6 +111,6 @@ db.sync({}).then(() => {
 
 module.exports = {
     models: {
-        Student, StudentLocal, Company, CompanyLocal, Admin, AuthStudent, AuthCompany, AuthAdmin, Application, Job,
+        Student, Company, UserLocal, Admin, Auth, Application, Job,
     }
 };

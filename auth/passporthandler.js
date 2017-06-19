@@ -4,9 +4,8 @@ const models = require('./../db/models').models;
 const localStudentStrategy = require('./strategies/local/student');
 const localCompanyStrategy = require('./strategies/local/company');
 const localAdminStrategy = require('./strategies/local/admin');
-const bearerStudentStrategy = require('./strategies/bearer/student');
-const bearerCompanyStrategy = require('./strategies/bearer/company');
-const bearerAdminStrategy = require('./strategies/bearer/admin');
+const bearerStrategy = require('./strategies/bearer/bearerStrategy');
+
 
 passport.serializeUser(function (user, cb) {
     return cb(null, {key: user.id, role: user.role});
@@ -49,9 +48,7 @@ passport.deserializeUser(function (user, cb) {
 passport.use('local-student', localStudentStrategy);
 passport.use('local-company', localCompanyStrategy);
 passport.use('local-admin', localAdminStrategy);
-passport.use('bearer-student', bearerStudentStrategy);
-passport.use('bearer-company', bearerCompanyStrategy);
-passport.use('bearer-admin', bearerAdminStrategy);
+passport.use(bearerStudentStrategy);
 
 module.exports = passport;
 

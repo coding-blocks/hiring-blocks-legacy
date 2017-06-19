@@ -2,13 +2,18 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 const models = require('./../../../db/models').models;
 
 module.exports = new BearerStrategy(function (token, done) {
-    models.AuthAdmin.findOne({
+    models.Auth.findOne({
         where: {
             token: token
         },
-        include: [models.Admin]
+        include: [models.Student, models.Company, models.Admin]
     }).then(function (authToken) {
-        if (authToken && authToken.admin) {
+        //TODO ask how to work with {}
+        if (authToken && authToken.student.hasOwnProperty('id')) {
+            return done(null, authToken.student);
+        } else if (authToken && authToken.company.hasOwnProperty('id')) {
+            return done(null, authToken.company);
+        } else if (authToken && authToken.admin.hasOwnProperty('id')) {
             return done(null, authToken.admin);
         } else {
             return done(null, false, {message: 'Could not authorize'})
