@@ -95,20 +95,22 @@ router.post('/:id/edit', function (req, res) {
         models.User.update({
             email: email,
             contact: contact,
-            pincode: pincode,
-            companymanager: {
+            pincode: pincode
+        }, {where: {id: userId}}).then(function () {
+            models.CompanyManager.update({
                 designation: designation,
                 companyId: company.id
-            }
-        }, {
-            where: {id: userId},
-            include: models.CompanyManager,
-            returning: true
-        }).then(function (rows) {
-            const manager = rows[1][0].get();
-            res.send(manager);
-        }).catch(function (error) {
-            console.error(error)
+            }, {where: {userId: userId}}).then(function (rows) {
+                if (rows[0] !== 0) {
+                    const manager = rows[1][0].get();
+                    return res.send(manager);
+                }
+                return res.send({success: 'false'});
+            }).catch(function (err) {
+                return res.send({success: 'false'});
+            })
+        }).catch(function (err) {
+            return res.send({success: 'false'});
         });
     });
 

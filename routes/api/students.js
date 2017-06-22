@@ -20,8 +20,9 @@ router.post('/add', function (req, res) {
                     // cbStudent:false
                 }
             },
-            {include: [models.UserLocal, models.Student]
-        }).then(function (user) {
+            {
+                include: [models.UserLocal, models.Student]
+            }).then(function (user) {
             if (user)
                 res.send("Student created");
             else
@@ -63,7 +64,8 @@ router.post('/:id/edit', function (req, res) {
         email: email,
         contact: contact,
         pincode: pincode,
-        student: {
+    }, {where: {id: userId}}).then(function () {
+        models.Student.update({
             education: education,
             skills: skills,
             languages: languages,
@@ -71,21 +73,20 @@ router.post('/:id/edit', function (req, res) {
             trainings: trainings,
             cbStudent: cbStudent,
             cbCourses: cbCourses
-        }
-    }, {
-        where: {id: userId},
-        include: models.Student,
-        returning: true
-    }).then(function (rows) {
-        console.log(rows);
-        if (rows[0] !== 0) {
-            const student = rows[1][0].get();
-            return res.send(student);
-        }
+        }, {where: {userId: userId}}).then(function (rows) {
+            if (rows[0] !== 0) {
+                const student = rows[1][0].get();
+                return res.send(student);
+            }
+            return res.send({success: 'false'});
+        }).catch(function (err) {
+            console.log(err);
+            return res.send({success: 'false'});
+        })
+    }).catch(function (err) {
         return res.send({success: 'false'});
-    }).catch(function (error) {
-        console.error(error)
     });
+
 });
 
 router.get('/:id/applications', function (req, res) {

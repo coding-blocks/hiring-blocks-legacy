@@ -57,20 +57,22 @@ router.post('/:id/edit', function (req, res) {
     models.User.update({
         email: email,
         contact: contact,
-        pincode: pincode,
-        admin: {
+        pincode: pincode
+    }, {where: {id: userId}}).then(function () {
+        model.Admin.update({
             cbCentre: cbCentre,
             cbDesignation: cbDesignation
-        }
-    }, {
-        where: {id: userId},
-        include: models.Admin,
-        returning: true
-    }).then(function (rows) {
-        const admin = rows[1][0].get();
-        res.send(admin);
-    }).catch(function (error) {
-        console.error(error)
+        }, {where: {userId: userId}}).then(function (rows) {
+            if (rows[0] !== 0) {
+                const admin = rows[1][0].get();
+                res.send(admin);
+            }
+            return res.send({success: 'false'});
+        }).catch(function (err) {
+            return res.send({success: 'false'});
+        })
+    }).catch(function (err) {
+        return res.send({success: 'false'});
     });
 });
 
