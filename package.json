@@ -28,9 +28,9 @@
     "passport-http-bearer": "^1.0.1",
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
-    "pg": "^6.2.2",
+    "pg": "^6.4.0",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^3.30.4",
+    "sequelize": "^4.2.0",
     "uid2": "0.0.3"
   }
 }
