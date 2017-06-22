@@ -1,25 +1,24 @@
 const LocalStrategy = require('passport-local').Strategy;
 const models = require('./../../../db/models').models;
 
-const passutils = require('./../../../utils/password');
-
 module.exports = new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password'
 }, function (email, password, done) {
 
-    models.StudentLocal.findOne({
+    models.User.findOne({
         where: {email: email},
-        include: models.Student
-    }).then(function (studentLocal) {
-        console.log(studentLocal);
-        if (!studentLocal) {
+        include: models.UserLocal
+    }).then(function (user) {
+        console.log(user);
+        if (!user) {
             return done(null, false, {message: 'Incorrect email'});
         } else {
-            passutils.compare2hash(password, studentLocal.password).then(function (match) {
+            passutils.compare2hash(password, user.userlocal.password).then(function (match) {
                 if (match) {
                     console.log(2);
-                    return done(null, studentLocal.student);
+                    delete user.userlocal;
+                    return done(null, user);
                 } else {
                     console.log(3);
                     return done(null, false, {message: 'Incorrect password'});
