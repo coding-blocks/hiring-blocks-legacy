@@ -59,12 +59,13 @@ router.post('/:id/edit', function (req, res) {
         trainings = req.body.trainings,
         cbStudent = req.body.cbStudent,
         cbCourses = req.body.cbCourses;
-    console.log(education);
+    console.log(req.body.education);
     models.User.update({
         email: email,
         contact: contact,
         pincode: pincode,
     }, {where: {id: userId}}).then(function () {
+        console.log(education);
         models.Student.update({
             education: education,
             skills: skills,
@@ -74,11 +75,12 @@ router.post('/:id/edit', function (req, res) {
             cbStudent: cbStudent,
             cbCourses: cbCourses
         }, {where: {userId: userId}}).then(function (rows) {
-            if (rows[0] !== 0) {
-                const student = rows[1][0].get();
-                return res.send(student);
-            }
-            return res.send({success: 'false'});
+            // if (rows[0] !== 0) {
+                //const student = rows[1][0].get();
+               // return res.send(student);
+            // }
+            console.log(3);
+            return res.send({success: 'true'});
         }).catch(function (err) {
             console.log(err);
             return res.send({success: 'false'});

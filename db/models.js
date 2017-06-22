@@ -37,6 +37,7 @@ const User = db.define('user', {
     pincode: Sequelize.STRING,
 });
 
+
 const UserLocal = db.define('userlocal', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     password: Sequelize.STRING,
@@ -103,7 +104,7 @@ Job.hasMany(Application);
 
 
 
-db.sync({}).then(() => {
+db.sync({force: true}).then(() => {
     console.log('Database configured')
 });
 
