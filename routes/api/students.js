@@ -33,7 +33,7 @@ router.post('/add', function (req, res) {
 router.get('/:id', function (req, res) {
     models.User.findOne({
         where: {id: req.params.id},
-        include: models.student
+        include: models.Student
     }).then(function (user) {
         res.send(user);
     }).catch(function (err) {
@@ -70,7 +70,7 @@ router.post('/:id/edit', function (req, res) {
         }
     }, {
         where: {id: studentId},
-        include: models.student,
+        include: models.Student,
         returning: true
     }).then(function (rows) {
         const student = rows[1][0].get();
