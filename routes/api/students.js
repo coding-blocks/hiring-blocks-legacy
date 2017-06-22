@@ -2,17 +2,31 @@ const router = require('express').Router();
 const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 
+
 router.post('/add', function (req, res) {
-    if (req.body.firstname === "" || req.body.lastname === "" || req.body.email === "" || req.body.password === "") {
+    if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
         res.send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
-        models.Student.create({
-            name: req.body.name,
-            email: req.body.email,
-            password: hash
-        }).then(function (student) {
-            res.send(student);
+        models.User.create({
+                name: req.body.name,
+                email: req.body.email,
+                contact: req.body.contact,
+                pincode: req.body.pincode,
+                userlocal: {
+                    password: hash
+                },
+                student: {
+                    // cbStudent:false
+                }
+            },
+            {
+                include: [models.UserLocal, models.Student]
+            }).then(function (user) {
+            if (user)
+                res.send("Student created");
+            else
+                res.send("Could not create the student.");
         }).catch(function (err) {
             console.log(err);
             res.send("Could not create the student.");
@@ -20,11 +34,13 @@ router.post('/add', function (req, res) {
     })
 });
 
+
 router.get('/:id', function (req, res) {
-    models.Student.findOne({
-        where: {id: req.params.id}
-    }).then(function (student) {
-        res.send(student);
+    models.User.findOne({
+        where: {id: req.params.id},
+        include: models.Student
+    }).then(function (user) {
+        res.send(user);
     }).catch(function (err) {
         console.log(err);
         res.send('Unknown Student');
@@ -32,45 +48,53 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/:id/edit', function (req, res) {
-    let studentId = parseInt(req.params.id),
+    let userId = parseInt(req.params.id),
         email = req.body.email,
         contact = req.body.contact,
         pincode = req.body.pincode,
         education = req.body.education,
-        skills = req.body.skills.split(','),
-        languages = req.body.languages.split(','),
+        skills = req.body.skills,
+        languages = req.body.languages,
         projects = req.body.projects,
         trainings = req.body.trainings,
         cbStudent = req.body.cbStudent,
-        cbCourses = req.body.cbCourses.split(',');
-    console.log(JSON.parse(education));
-
-    models.Student.update({
+        cbCourses = req.body.cbCourses;
+    console.log(req.body.education);
+    models.User.update({
         email: email,
         contact: contact,
         pincode: pincode,
-        education: JSON.parse(education),
-        skills: skills,
-        languages: languages,
-        projects: JSON.parse(projects),
-        trainings: JSON.parse(trainings),
-        cbStudent: cbStudent,
-        cbCourses: cbCourses
-    }, {
-        where: {id: studentId},
-        returning: true
-    }).then(function (rows) {
-        const student = rows[1][0].get();
-        res.send(student);
-    }).catch(function (error) {
-        console.error(error)
+    }, {where: {id: userId}}).then(function () {
+        console.log(education);
+        models.Student.update({
+            education: education,
+            skills: skills,
+            languages: languages,
+            projects: projects,
+            trainings: trainings,
+            cbStudent: cbStudent,
+            cbCourses: cbCourses
+        }, {where: {userId: userId}}).then(function (rows) {
+            // if (rows[0] !== 0) {
+                //const student = rows[1][0].get();
+               // return res.send(student);
+            // }
+            console.log(3);
+            return res.send({success: 'true'});
+        }).catch(function (err) {
+            console.log(err);
+            return res.send({success: 'false'});
+        })
+    }).catch(function (err) {
+        return res.send({success: 'false'});
     });
+
 });
 
 router.get('/:id/applications', function (req, res) {
-    let studentId = parseInt(req.params.id);
+    let userId = parseInt(req.params.id);
     models.Application.findAll({
-        where: {studentId: studentId},
+        where: {userId: userId},
         include: models.Job
     }).then(function (applications) {
         res.send(applications);
@@ -80,7 +104,9 @@ router.get('/:id/applications', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    models.Student.findAll().then(function (students) {
+    models.Student.findAll({
+        include: models.User
+    }).then(function (students) {
         res.send(students);
     }).catch(function (error) {
         console.log(error);

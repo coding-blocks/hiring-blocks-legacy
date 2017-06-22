@@ -34,8 +34,9 @@ const User = db.define('user', {
     name: Sequelize.STRING,
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
-    pincode: Sequelize.INTEGER,
+    pincode: Sequelize.STRING,
 });
+
 
 const UserLocal = db.define('userlocal', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
@@ -85,7 +86,7 @@ const Application = db.define('application', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     status: Sequelize.STRING,
     date: Sequelize.INTEGER,
-    app: Sequelize.STRING
+    application: Sequelize.STRING
 });
 
 CompanyManager.belongsTo(Company);
@@ -95,15 +96,15 @@ Company.hasMany(CompanyManager);
 Job.belongsTo(Company);
 Company.hasMany(Job);
 
-Application.belongsTo(Student);
-Student.hasMany(Application);
+Application.belongsTo(User);
+User.hasMany(Application);
 
 Application.belongsTo(Job);
 Job.hasMany(Application);
 
 
 
-db.sync({}).then(() => {
+db.sync({force: true}).then(() => {
     console.log('Database configured')
 });
 

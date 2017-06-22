@@ -3,18 +3,23 @@ const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 
 router.post('/add', function (req, res) {
-    if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
+    if (req.body.name === "") {
         res.send("Insufficient Details");
     }
-    password.pass2hash(req.body.password).then(function (hash) {
-        models.Company.create({
-            name: req.body.name,
-            email: req.body.email,
-            password: hash
-        }).then(function (company) {
-            res.send(company.get());
-        })
+    models.Company.create({
+        name: req.body.name,
+        website: req.body.website,
+        loactions: req.body.loactions,
+        skills: req.body.skills,
+        contactEmail: req.body.contactEmail,
+        contactNumber: req.body.contactNumber,
+    }).then(function (company) {
+        res.send(company.get());
+    }).catch(function (err) {
+        console.log(err);
+        res.send("Could not create company");
     })
+
 });
 
 
@@ -26,26 +31,24 @@ router.get('/:id', function (req, res) {
         res.send(company.get());
     }).catch(function (err) {
         console.log(err);
-        res.send('Unknown Company or unauthorized request');
+        res.send('Unknown Company');
     })
 });
 
 router.post('/:id/edit', function (req, res) {
     let companyId = parseInt(req.params.id),
-    email = req.body.email,
-    website = req.body.website,
-    locations = req.body.locations.split(','),
-    skills = req.body.skills.split(','),
-    repName = req.body.repName,
-    repNumber = req.body.repNumber;
+        website = req.body.website,
+        locations = req.body.locations,
+        skills = req.body.skills,
+        companyEmail = req.body.companyEmail,
+        companyNumber = req.body.companyNumber;
 
     models.Company.update({
-        email: email,
         website: website,
         locations: locations,
         skills: skills,
-        repName: repName,
-        repNumber: repNumber
+        companyEmail: companyEmail,
+        companyNumber: companyNumber
     }, {
         where: {id: companyId},
         returning: true
@@ -67,21 +70,24 @@ router.get('/:id/jobs', function (req, res) {
         res.send(jobs);
     }).catch(function (err) {
         console.log(err);
-        res.send("Unknown company or unauthorized access");
+        res.send("Unknown company");
     })
 });
-
 
 router.get('/:id/applications', function (req, res) {
     let companyId = parseInt(req.params.id);
     models.Application.findAll({
         where: {'$job.companyId$': companyId},
-        include: [models.Student, models.Job]
+        include: [{
+            model: models.User,
+            include: models.Student
+        },
+            models.Job]
     }).then(function (applications) {
         res.send(applications);
     }).catch(function (err) {
         console.log(err);
-        res.send("Unknown company or unauthorized access");
+        res.send("Unknown company");
     });
 });
 
