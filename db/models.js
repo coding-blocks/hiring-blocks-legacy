@@ -42,7 +42,7 @@ const UserLocal = db.define('userlocal', {
     password: Sequelize.STRING,
 });
 
-const AuthToken = db.define('authtokens', {
+const AuthToken = db.define('authtoken', {
     token: {
         type: Sequelize.STRING,
         primaryKey: true
