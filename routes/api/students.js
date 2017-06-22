@@ -69,7 +69,7 @@ router.post('/:id/edit', function (req, res) {
             cbCourses: cbCourses
         }
     }, {
-        where: {id: userId},
+        where: {id: Id},
         include: models.Student,
         returning: true
     }).then(function (rows) {

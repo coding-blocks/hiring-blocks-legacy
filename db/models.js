@@ -104,7 +104,7 @@ Job.hasMany(Application);
 
 
 
-db.sync({}).then(() => {
+db.sync({force: true}).then(() => {
     console.log('Database configured')
 });
 
