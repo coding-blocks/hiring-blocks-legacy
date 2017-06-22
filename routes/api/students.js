@@ -43,7 +43,7 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/:id/edit', function (req, res) {
-    let studentId = parseInt(req.params.id),
+    let userId = parseInt(req.params.id),
         email = req.body.email,
         contact = req.body.contact,
         pincode = req.body.pincode,
@@ -69,7 +69,7 @@ router.post('/:id/edit', function (req, res) {
             cbCourses: cbCourses
         }
     }, {
-        where: {id: studentId},
+        where: {id: userId},
         include: models.Student,
         returning: true
     }).then(function (rows) {
