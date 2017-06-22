@@ -121,4 +121,34 @@ route.post('/admin', (req, res) => {
     })
 });
 
+route.post('/user', function (req, res) {
+    if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
+        res.send("Insufficient Details");
+    }
+    password.pass2hash(req.body.password).then(function (hash) {
+        console.log(password);
+        console.log(hash);
+        models.User.create({
+                email: req.body.email,
+                name: req.body.name,
+                userlocal: {password: hash}
+            }
+            , {
+                include: [models.UserLocal]
+            }).then(function (user) {
+            if (user) {
+                res.send({success: 'true'});
+            } else {
+                res.send({success: 'false'})
+            }
+        }).catch(function (err) {
+            console.log(err);
+            res.send({success: 'error'});
+        })
+    }).catch(function (err) {
+        console.log(err);
+        res.send({success: 'error'});
+    })
+});
+
 module.exports = route;

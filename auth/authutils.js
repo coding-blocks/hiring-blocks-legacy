@@ -51,5 +51,6 @@ function ensureStudent(fallbackPath) {
 module.exports = {
     ensureLogin,
     ensureAdmin,
-    ensureCompanyManager
+    ensureCompanyManager,
+    ensureStudent
 };

@@ -6,21 +6,19 @@ const password = require('../utils/password');
 
 route.post('/', (req, res) => {
     console.log(1);
-    models.UserLocal.findOne({
+    models.User.findOne({
         where: {
             email: req.body.email,
         },
-        include: [models.Student, models.Company, models.Admin]
-    }).then(function (userLocal) {
-        if (userLocal) {
-            password.compare2hash(req.body.password, userLocal.password).then(function (match) {
+        include: [models.UserLocal, models.Student, models.CompanyManager, models.Admin]
+    }).then(function (user) {
+        if (user) {
+            password.compare2hash(req.body.password, user.userlocal.password).then(function (match) {
                 if (match) {
-                    models.Auth.create({
+                    models.AuthToken.create({
                         token: uid(30),
-                        role: userLocal.role,
-                        studentId: userLocal.student.id,
-                        companyId: userLocal.companyId,
-                        adminId: userLocal.adminId
+                        role: user.hasOwnProperty('student') ? 'Student' : user.hasOwnProperty('companymanager') ? 'CompanyManager' : user.hasOwnProperty('admin') ? "Admin" : "",
+                        userId:user.id
                     }).then(function (authToken) {
                         console.log(4);
                         res.send({
