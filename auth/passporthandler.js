@@ -48,7 +48,7 @@ passport.deserializeUser(function (user, cb) {
 passport.use('local-student', localStudentStrategy);
 passport.use('local-company', localCompanyStrategy);
 passport.use('local-admin', localAdminStrategy);
-passport.use(bearerStudentStrategy);
+passport.use(bearerStrategy);
 
 module.exports = passport;
 
