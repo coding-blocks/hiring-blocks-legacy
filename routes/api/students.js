@@ -9,14 +9,18 @@ router.post('/add', function (req, res) {
     }
     password.pass2hash(req.body.password).then(function (hash) {
         models.User.create({
-            name: req.body.name,
-            email: req.body.email,
-            contact: req.body.contact,
-            pincode: req.body.pincode,
-            userlocal: {
-                password: hash
+                name: req.body.name,
+                email: req.body.email,
+                contact: req.body.contact,
+                pincode: req.body.pincode,
+                userlocal: {
+                    password: hash
+                },
+                student: {
+                    // cbStudent:false
+                }
             },
-            include: models.userlocal
+            {include: [models.UserLocal, models.Student]
         }).then(function (user) {
             if (user)
                 res.send("Student created");
@@ -54,27 +58,31 @@ router.post('/:id/edit', function (req, res) {
         trainings = req.body.trainings,
         cbStudent = req.body.cbStudent,
         cbCourses = req.body.cbCourses;
-
+    console.log(education);
     models.User.update({
         email: email,
         contact: contact,
         pincode: pincode,
         student: {
-            education: JSON.parse(education),
+            education: education,
             skills: skills,
             languages: languages,
-            projects: JSON.parse(projects),
-            trainings: JSON.parse(trainings),
+            projects: projects,
+            trainings: trainings,
             cbStudent: cbStudent,
             cbCourses: cbCourses
         }
     }, {
-        where: {id: Id},
+        where: {id: userId},
         include: models.Student,
         returning: true
     }).then(function (rows) {
-        const student = rows[1][0].get();
-        res.send(student);
+        console.log(rows);
+        if (rows[0] !== 0) {
+            const student = rows[1][0].get();
+            return res.send(student);
+        }
+        return res.send({success: 'false'});
     }).catch(function (error) {
         console.error(error)
     });
@@ -93,9 +101,8 @@ router.get('/:id/applications', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    models.User.findAll({
-        where: {role: "Student"},
-        include: models.Student
+    models.Student.findAll({
+        include: models.User
     }).then(function (students) {
         res.send(students);
     }).catch(function (error) {

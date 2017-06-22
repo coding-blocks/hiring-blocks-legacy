@@ -115,12 +115,8 @@ router.post('/:id/edit', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    models.User.findAll({
-        where: {role: "Company Manager"},
-        include: [{
-            model: models.CompanyManager,
-            include: models.Company
-        }]
+    models.CompanyManager.findAll({
+        include: [models.User, models.Company]
     }).then(function (manager) {
         res.send(manager);
     }).catch(function (error) {

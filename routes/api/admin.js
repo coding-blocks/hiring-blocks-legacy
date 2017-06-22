@@ -59,8 +59,8 @@ router.post('/:id/edit', function (req, res) {
         contact: contact,
         pincode: pincode,
         admin: {
-            cbCentre: req.body.cbCentre,
-            cbDesignation: req.body.cbDesignation
+            cbCentre: cbCentre,
+            cbDesignation: cbDesignation
         }
     }, {
         where: {id: userId},
@@ -75,9 +75,8 @@ router.post('/:id/edit', function (req, res) {
 });
 
 router.get('/', function (req, res) {
-    models.User.findAll({
-        where: {role: "Admin"},
-        include: models.Admin
+    models.Admin.findAll({
+        include: models.User
     }).then(function (admins) {
         res.send(admins);
     }).catch(function (error) {
