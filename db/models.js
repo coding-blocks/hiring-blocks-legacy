@@ -34,7 +34,7 @@ const User = db.define('user', {
     name: Sequelize.STRING,
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
-    pincode: Sequelize.INTEGER,
+    pincode: Sequelize.STRING,
 });
 
 const UserLocal = db.define('userlocal', {
@@ -85,7 +85,7 @@ const Application = db.define('application', {
     id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
     status: Sequelize.STRING,
     date: Sequelize.INTEGER,
-    app: Sequelize.STRING
+    application: Sequelize.STRING
 });
 
 CompanyManager.belongsTo(Company);
