@@ -35,6 +35,7 @@ const User = db.define('user', {
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
     pincode: Sequelize.STRING,
+    role: Sequelize.STRING
 });
 
 const UserLocal = db.define('userlocal', {
@@ -95,8 +96,8 @@ Company.hasMany(CompanyManager);
 Job.belongsTo(Company);
 Company.hasMany(Job);
 
-Application.belongsTo(Student);
-Student.hasMany(Application);
+Application.belongsTo(User);
+User.hasMany(Application);
 
 Application.belongsTo(Job);
 Job.hasMany(Application);
