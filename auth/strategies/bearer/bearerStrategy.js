@@ -16,6 +16,7 @@ module.exports = new BearerStrategy(function (token, done) {
     }).then(function (authToken) {
         console.log(authToken.get());
         if (authToken && authToken.user.student) {
+            console.log("authorized");
             return done(null, {role: "Student", user: authToken.user.student});
         }
         else if (authToken && authToken.user.companymanager) {
@@ -25,9 +26,11 @@ module.exports = new BearerStrategy(function (token, done) {
             return done(null, {role: "Admin", user: authToken.user.admin});
         }
         else {
+            console.log("12");
             return done(null, {role: 'User', user: null});
         }
     }).catch(function (err) {
+        console.log("12");
         console.log(err);
         return done(err, false);
     })

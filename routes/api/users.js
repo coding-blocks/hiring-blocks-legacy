@@ -1,6 +1,8 @@
 const router = require('express').Router();
 const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
+const passport = require('../../auth/passporthandler');
+
 
 router.get('/', function (req, res) {
     models.User.findAll().then(function (users) {
@@ -11,6 +13,21 @@ router.get('/', function (req, res) {
     }).catch(function (err) {
         console.log(err);
         return res.send("Could not get the users");
+    })
+});
+
+router.get('/me',function (req, res) {
+    console.log(req.User);
+    models.User.findOne({
+        where: {id: req.user.id}
+    }).then(function (user) {
+        if (user)
+            return res.send(user);
+        else
+            return res.send("Could not send the details");
+    }).catch(function (err) {
+        console.log(err);
+        return res.send("Could not get the user");
     })
 });
 
@@ -28,22 +45,9 @@ router.get('/:id', function (req, res) {
     })
 });
 
-router.get('/me', function (req, res) {
-    console.log(req.User);
-    models.User.findOne({
-        where: {id: req.user.id}
-    }).then(function (user) {
-        if (user)
-            return res.send(user);
-        else
-            return res.send("Could not send the details");
-    }).catch(function (err) {
-        console.log(err);
-        return res.send("Could not get the user");
-    })
-});
 
-router.get('/me/student', function (req, res) {
+
+router.get('/me/student',function (req, res) {
     models.User.findOne({
         where: {id: req.user.id},
         include: models.Student
