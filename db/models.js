@@ -35,6 +35,7 @@ const User = db.define('user', {
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
     pincode: Sequelize.STRING,
+    image:Sequelize.STRING
 });
 
 
@@ -108,7 +109,7 @@ Application.belongsTo(Job);
 Job.hasMany(Application);
 
 
-db.sync({alter: true}).then(() => {
+db.sync({force: false}).then(() => {
     console.log('Database configured')
 });
 
