@@ -105,7 +105,6 @@ router.get('/:id/applications', function (req, res) {
 
 router.get('/', function (req, res) {
     models.Student.findAll({
-        include: models.User
     }).then(function (students) {
         res.status(200).send(students);
     }).catch(function (error) {
