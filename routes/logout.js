@@ -6,6 +6,7 @@ route.get('/', (req, res) => {
     req.session.destroy(() => {
         res.redirect('/login')
     });
+    //TODO: If there is token, destroy the token from AuthToken table
 
 });
 

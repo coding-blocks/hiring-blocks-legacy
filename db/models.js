@@ -108,7 +108,7 @@ Application.belongsTo(Job);
 Job.hasMany(Application);
 
 
-db.sync({alter: true}).then(() => {
+db.sync({force: false}).then(() => {
     console.log('Database configured')
 });
 

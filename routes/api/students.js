@@ -2,7 +2,6 @@ const router = require('express').Router();
 const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 
-
 router.post('/add', function (req, res) {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
         res.send("Insufficient Details");
