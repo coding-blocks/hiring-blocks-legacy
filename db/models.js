@@ -83,7 +83,7 @@ const Job = db.define("job", {
     skills: Sequelize.ARRAY(Sequelize.STRING),
     jobType: Sequelize.STRING,
     location: Sequelize.STRING,
-    stipend: Sequelize.STRING,
+    salary: Sequelize.STRING,
     active: Sequelize.BOOLEAN,
     startDate: Sequelize.STRING,
     endDate: Sequelize.STRING
