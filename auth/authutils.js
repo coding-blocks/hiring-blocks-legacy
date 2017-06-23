@@ -1,3 +1,4 @@
+const models = require('./../db/models').models;
 
 function ensureLogin(fallbackPath) {
 
@@ -17,8 +18,15 @@ function ensureCompanyManager(fallbackPath) {
 
     return function (req, res, next) {
 
-        if (req.user && req.user.companymanager) {
-            next()
+        if (req.user) {
+            models.CompanyManager.findOne({
+                where: {userId: req.user.id}
+            }).then(function (user) {
+                if(user)
+                    next();
+                else
+                    res.redirect(fallbackPath)
+            })
         } else {
             res.redirect(fallbackPath);
         }
@@ -28,8 +36,15 @@ function ensureCompanyManager(fallbackPath) {
 function ensureAdmin(fallbackPath) {
     return function (req, res, next) {
 
-        if (req.user && req.user.admin) {
-            next();
+        if (req.user) {
+            models.Admin.findOne({
+                where: {userId: req.user.id}
+            }).then(function (user) {
+                if(user)
+                    next();
+                else
+                    res.redirect(fallbackPath)
+            })
         } else {
             res.redirect(fallbackPath);
         }
@@ -39,8 +54,15 @@ function ensureAdmin(fallbackPath) {
 function ensureStudent(fallbackPath) {
     return function (req, res, next) {
 
-        if (req.user && req.user.student) {
-            next();
+        if (req.user) {
+            models.Student.findOne({
+                where: {userId: req.user.id}
+            }).then(function (user) {
+                if(user)
+                    next();
+                else
+                    res.redirect(fallbackPath)
+            })
         } else {
             res.redirect(fallbackPath);
         }

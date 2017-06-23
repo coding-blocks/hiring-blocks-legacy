@@ -2,9 +2,12 @@ const router = require('express').Router();
 const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 const passport = require('../../auth/passporthandler');
-
+const ensure = require('./../../auth/authutils');
 
 router.get('/', function (req, res) {
+    console.log("****************");
+    console.log(req.user.get());
+    console.log("***********************");
     models.User.findAll().then(function (users) {
         if (users)
             return res.send(users);
@@ -16,7 +19,7 @@ router.get('/', function (req, res) {
     })
 });
 
-router.get('/me',function (req, res) {
+router.get('/me', function (req, res) {
     console.log(req.user);
     models.User.findOne({
         where: {id: req.user.id}
@@ -45,48 +48,45 @@ router.get('/:id', function (req, res) {
     })
 });
 
-router.get('/me/student',function (req, res) {
-    models.User.findOne({
-        where: {id: req.user.id},
-        include: models.Student
+router.get('/me/student', function (req, res) {
+    models.Student.findOne({
+        where: {userId: req.user.id},
     }).then(function (student) {
-        if (student) {
-            return res.send(student);
+        if (!student) {
+            return res.send("You are not a Student.");
         }
-        else
-            return res.send("not student");
+        return res.send(student);
+
     }).catch(function (err) {
         console.log(err);
-        return res.send('Could not get the student details');
+        return res.send('Could not get the Student details');
     })
 });
 
 router.get('/me/companymanager', function (req, res) {
-    models.User.findOne({
+    models.CompanyManager.findOne({
         where: {id: req.user.id},
-        include: models.CompanyManager
     }).then(function (companymanager) {
         if (companymanager) {
             return res.send(companymanager);
         }
         else
-            return res.send("not companymanager");
+            return res.send("You are not a Company Manager.");
     }).catch(function (err) {
         console.log(err);
-        return res.send('Could not get the companymanager details');
+        return res.send('Could not get the Company Manager details');
     })
 });
 
 router.get('/me/admin', function (req, res) {
-    models.User.findOne({
+    models.Admin.findOne({
         where: {id: req.user.id},
-        include: models.Admin
     }).then(function (admin) {
         if (admin) {
             return res.send(admin);
         }
         else
-            return res.send("not admin");
+            return res.send("You are not an Admin.");
     }).catch(function (err) {
         console.log(err);
         return res.send('Could not get the admin details');
@@ -126,8 +126,8 @@ router.post('/me/student/create', function (req, res) {
 router.post('/me/companymanager/create', function (req, res) {
     let userId = parseInt(req.user.id),
         designation = req.body.designation,
-        company = req.body.company;
-    models.Company.findOne({where: {name: comapny}}).then(function (company) {
+        companyName = req.body.company;
+    models.Company.findOne({where: {name: companyName}}).then(function (company) {
         if (company) {
             models.CompanyManager.create({
                 designaton: designation,
@@ -144,13 +144,14 @@ router.post('/me/companymanager/create', function (req, res) {
                 return res.send("could not create the companymanager");
             });
         } else {
+            console.log(companyName);
             models.Company.create({
-                name: company
-            }).then(function (company) {
-                if (company) {
+                name: companyName
+            }).then(function (companyobj) {
+                if (companyobj) {
                     models.CompanyManager.create({
                         designaton: designation,
-                        companyId: company.id,
+                        companyId: companyobj.id,
                         userId: userId
                     }).then(function (companymanager) {
                         if (companymanager)
