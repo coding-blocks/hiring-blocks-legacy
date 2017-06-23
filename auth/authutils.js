@@ -1,11 +1,11 @@
 const models = require('./../db/models').models;
 
-function ensureLogin(fallbackPath) {
+function ensureLogin() {
 
     return function (req, res, next) {
 
         if (!req.user) {
-            res.redirect(fallbackPath)
+            res.send("Please login first");
         } else {
             next();
         }
@@ -25,10 +25,10 @@ function ensureCompanyManager() {
                 if(user)
                     next();
                 else
-                    res.send("nopes");
+                    res.send("Only Company Managers Allowed");
             })
         } else {
-            res.redirect(fallbackPath);
+            res.send("Please login first");
         }
     }
 }
@@ -43,15 +43,15 @@ function ensureAdmin() {
                 if(user)
                     next();
                 else
-                    res.redirect(fallbackPath)
+                    res.send("Only Admins Allowed");
             })
         } else {
-            res.redirect(fallbackPath);
+            res.send("Please login first");
         }
     }
 }
 
-function ensureStudent(fallbackPath) {
+function ensureStudent() {
     return function (req, res, next) {
 
         if (req.user) {
@@ -61,10 +61,10 @@ function ensureStudent(fallbackPath) {
                 if(user)
                     next();
                 else
-                    res.redirect(fallbackPath)
+                    res.send("Only Students Allowed")
             })
         } else {
-            res.redirect(fallbackPath);
+            res.send("Please login first");
         }
     }
 }
