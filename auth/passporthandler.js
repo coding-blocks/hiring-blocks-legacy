@@ -17,18 +17,13 @@ passport.deserializeUser(function (userId, cb) {
     if (!userId) {
         return cb(null, userId);
     }
-    if (userId) {
-        models.User.findByPrimary(userId).then(function (user) {
-            return cb(null, user);
-        }).catch(function (err) {
-            console.log(err);
-            cb(err, false);
-        })
 
-    }
-    else {
-        cb((new Error("Could not deserialize")), false);
-    }
+    models.User.findByPrimary(userId).then(function (user) {
+        return cb(null, user);
+    }).catch(function (err) {
+        console.log(err);
+        cb(err, false);
+    })
 
 });
 
