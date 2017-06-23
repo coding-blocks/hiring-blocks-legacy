@@ -14,17 +14,18 @@ module.exports = new BearerStrategy(function (token, done) {
             include: [models.Student, models.CompanyManager, models.Admin]
         }]
     }).then(function (authToken) {
+
+        //TODO : Ask if we need student or something like that here or not.
         console.log(authToken.get());
-        if (authToken && authToken.user.student) {
-            console.log("authorized");
-            return done(null, {role: "Student", user: authToken.user.student});
+        if (authToken && authToken.user) {
+            return done(null, authToken.user);
         }
-        else if (authToken && authToken.user.companymanager) {
-            return done(null, {role: "CompanyManager", user: authToken.user.companymanager});
-        }
-        else if (authToken && authToken.user.admin) {
-            return done(null, {role: "Admin", user: authToken.user.admin});
-        }
+        // else if (authToken && authToken.user.companymanager) {
+        //     return done(null, {role: "CompanyManager", user: authToken.user.companymanager});
+        // }
+        // else if (authToken && authToken.user.admin) {
+        //     return done(null, {role: "Admin", user: authToken.user.admin});
+        // }
         else {
             console.log("12");
             return done(null, {role: 'User', user: null});

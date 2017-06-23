@@ -1,27 +1,25 @@
 const passport = require('passport');
 const models = require('./../db/models').models;
 
-const localStudentStrategy = require('./strategies/local/student');
-const localCompanyStrategy = require('./strategies/local/company');
-const localAdminStrategy = require('./strategies/local/admin');
+const localStrategy = require('./strategies/local/localStrategy');
 const bearerStrategy = require('./strategies/bearer/bearerStrategy');
 
 
 passport.serializeUser(function (user, cb) {
-    if (!user.user) {
-        return cb(null, user);
+    if (!user) {
+        return cb(null, false);
     }
-    return cb(null, {key: user.user.id, role: user.role});
+    return cb(null, user.id);
 });
 
 
-passport.deserializeUser(function (userObj, cb) {
-    if (!userObj.key) {
-        return cb(null, userObj);
+passport.deserializeUser(function (userId, cb) {
+    if (!userId) {
+        return cb(null, userId);
     }
-    if (userObj && userObj.role) {
-        models[userObj.role].findByPrimary(userObj.key).then(function (user) {
-            return cb(null, {role: userObj.role, user: user});
+    if (userId) {
+        models.User.findByPrimary(userId).then(function (user) {
+            return cb(null, user);
         }).catch(function (err) {
             console.log(err);
             cb(err, false);
@@ -34,9 +32,7 @@ passport.deserializeUser(function (userObj, cb) {
 
 });
 
-passport.use('local-student', localStudentStrategy);
-passport.use('local-company', localCompanyStrategy);
-passport.use('local-admin', localAdminStrategy);
+passport.use(localStrategy);
 
 passport.use(bearerStrategy);
 

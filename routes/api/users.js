@@ -45,8 +45,6 @@ router.get('/:id', function (req, res) {
     })
 });
 
-
-
 router.get('/me/student',function (req, res) {
     models.User.findOne({
         where: {id: req.user.id},
