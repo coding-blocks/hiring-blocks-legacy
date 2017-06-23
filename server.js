@@ -3,7 +3,7 @@ const express = require('express')
     , session = require('express-session')
     , passport = require('./auth/passporthandler')
     , cookieParser = require('cookie-parser')
-    , secrets = require('./secrets.json');
+    , secrets = require('./secret-sample.json');
 
 const app = express();
 const apirouter = require('./routes/api')

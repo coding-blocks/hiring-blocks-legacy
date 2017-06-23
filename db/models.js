@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
-
-const db = new Sequelize('hb', 'cbuser', 'cbpass', {
-    host: 'localhost',
-    dialect: 'postgres'
+const secret = require('./../secret-sample.json');
+const db = new Sequelize(secret.DATABASE, secret.DB_USER, secret.DB_PASSWORD, {
+    host: secret.DB_HOST,
+    dialect: secret.DB_DIALECT
 });
 
 
@@ -51,12 +51,17 @@ const AuthToken = db.define('authtoken', {
     role: Sequelize.STRING
 });
 
-UserLocal.belongsTo(User); User.hasOne(UserLocal);
-AuthToken.belongsTo(User); User.hasMany(AuthToken);
+UserLocal.belongsTo(User);
+User.hasOne(UserLocal);
+AuthToken.belongsTo(User);
+User.hasMany(AuthToken);
 
-Student.belongsTo(User); User.hasOne(Student);
-CompanyManager.belongsTo(User); User.hasOne(CompanyManager);
-Admin.belongsTo(User); User.hasOne(Admin);
+Student.belongsTo(User);
+User.hasOne(Student);
+CompanyManager.belongsTo(User);
+User.hasOne(CompanyManager);
+Admin.belongsTo(User);
+User.hasOne(Admin);
 
 
 const Company = db.define('company', {
@@ -101,7 +106,6 @@ User.hasMany(Application);
 
 Application.belongsTo(Job);
 Job.hasMany(Application);
-
 
 
 db.sync({alter: true}).then(() => {
