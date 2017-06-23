@@ -14,21 +14,22 @@ router.get('/', function (req, res) {
     })
 });
 
-router.get('/:id', function (req, res) {
-    models.User.findOne({
-        where: {id: req.params.id}
-    }).then(function (user) {
-        if (user)
-            return res.send(user);
-        else
-            return res.send("No user with this id exists");
-    }).catch(function (err) {
-        console.log(err);
-        return res.send("Could not get the user");
-    })
-});
+// router.get('/:id', function (req, res) {
+//     models.User.findOne({
+//         where: {id: req.params.id}
+//     }).then(function (user) {
+//         if (user)
+//             return res.send(user);
+//         else
+//             return res.send("No user with this id exists");
+//     }).catch(function (err) {
+//         console.log(err);
+//         return res.send("Could not get the user");
+//     })
+// });
 
 router.get('/me', function (req, res) {
+    console.log("*****************");
     console.log(req.User);
     models.User.findOne({
         where: {id: req.user.id}

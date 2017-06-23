@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const passport = require('../../auth/passporthandler');
 
-// router.use(passport.authenticate('bearer'));
+router.use(passport.authenticate('bearer'));
 
 router.use('/students', require('./students'));
 router.use('/companymanager', require('./companyManager'));
