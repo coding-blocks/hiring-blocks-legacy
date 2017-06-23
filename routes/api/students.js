@@ -5,7 +5,7 @@ const password = require('./../../utils/password');
 
 router.post('/add', function (req, res) {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.send("Insufficient Details");
+        res.status(400).send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
         models.User.create({
@@ -24,12 +24,12 @@ router.post('/add', function (req, res) {
                 include: [models.UserLocal, models.Student]
             }).then(function (user) {
             if (user)
-                res.send("Student created");
+                res.status(201).send("Student created");
             else
-                res.send("Could not create the student.");
+                res.status(500).send("Could not create the student.");
         }).catch(function (err) {
             console.log(err);
-            res.send("Could not create the student.");
+            res.status(500).send("Could not create the student.");
         })
     })
 });
@@ -40,10 +40,10 @@ router.get('/:id', function (req, res) {
         where: {id: req.params.id},
         include: models.Student
     }).then(function (user) {
-        res.send(user);
+        res.status(200).send(user);
     }).catch(function (err) {
         console.log(err);
-        res.send('Unknown Student');
+        res.status(500).send('Unknown Student');
     })
 });
 
@@ -80,13 +80,13 @@ router.post('/:id/edit', function (req, res) {
                // return res.send(student);
             // }
             console.log(3);
-            return res.send({success: 'true'});
+            return res.status(200).send({success: 'true'});
         }).catch(function (err) {
             console.log(err);
-            return res.send({success: 'false'});
+            return res.status(500).send({success: 'false'});
         })
     }).catch(function (err) {
-        return res.send({success: 'false'});
+        return res.status(500).send({success: 'false'});
     });
 
 });
@@ -97,7 +97,7 @@ router.get('/:id/applications', function (req, res) {
         where: {userId: userId},
         include: models.Job
     }).then(function (applications) {
-        res.send(applications);
+        res.status(200).send(applications);
     }).catch(function (error) {
         console.log(error);
     })
@@ -107,7 +107,7 @@ router.get('/', function (req, res) {
     models.Student.findAll({
         include: models.User
     }).then(function (students) {
-        res.send(students);
+        res.status(200).send(students);
     }).catch(function (error) {
         console.log(error);
     })

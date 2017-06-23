@@ -4,7 +4,7 @@ const password = require('./../../utils/password');
 
 router.post('/add', function (req, res) {
     if (req.body.name === "") {
-        res.send("Insufficient Details");
+        res.status(403).send("Insufficient Details");
     }
     models.Company.create({
         name: req.body.name,
@@ -14,10 +14,10 @@ router.post('/add', function (req, res) {
         contactEmail: req.body.contactEmail,
         contactNumber: req.body.contactNumber,
     }).then(function (company) {
-        res.send(company.get());
+        res.status(201).send(company.get());
     }).catch(function (err) {
         console.log(err);
-        res.send("Could not create company");
+        res.status(500).send("Could not create company");
     })
 
 });
@@ -28,10 +28,10 @@ router.get('/:id', function (req, res) {
     models.Company.findOne({
         where: {id: companyId}
     }).then(function (company) {
-        res.send(company.get());
+        res.status(200).send(company.get());
     }).catch(function (err) {
         console.log(err);
-        res.send('Unknown Company');
+        res.status(500).send('Unknown Company');
     })
 });
 
@@ -54,7 +54,7 @@ router.post('/:id/edit', function (req, res) {
         returning: true
     }).then(function (rows) {
         const company = rows[1][0].get();
-        res.send(company);
+        res.status(200).send(company);
     }).catch(function (err) {
         console.log(err);
     });
@@ -67,10 +67,10 @@ router.get('/:id/jobs', function (req, res) {
         where: {companyId: companyId}
     }).then(function (jobs) {
         console.log(jobs);
-        res.send(jobs);
+        res.status(200).send(jobs);
     }).catch(function (err) {
         console.log(err);
-        res.send("Unknown company");
+        res.status(500).send("Unknown company");
     })
 });
 
@@ -84,16 +84,16 @@ router.get('/:id/applications', function (req, res) {
         },
             models.Job]
     }).then(function (applications) {
-        res.send(applications);
+        res.status(200).send(applications);
     }).catch(function (err) {
         console.log(err);
-        res.send("Unknown company");
+        res.status(500).send("Unknown company");
     });
 });
 
 router.get('/', function (req, res) {
     models.Company.findAll().then(function (companies) {
-        res.send(companies);
+        res.status(200).send(companies);
     }).catch(function (err) {
         console.log(err);
     })

@@ -15,7 +15,7 @@ router.post('/add', function (req, res) {
         endDate: req.body.endDate,
         companyId:companyId
     }).then(function (job) {
-        res.send(job);
+        res.status(201).send(job);
     }).catch(function (err) {
         console.log(err);
     })
@@ -26,7 +26,7 @@ router.get('/:id', function (req, res) {
     models.Job.findOne({
         where: {id: jobId}
     }).then(function (job) {
-        res.send(job);
+        res.status(200).send(job);
     }).catch(function (err) {
         console.log(err);
     })
@@ -42,13 +42,13 @@ router.post('/:id/apply', function (req, res) {
                 userId: req.query.userId,
                 jobId: jobId
             }).then(function (application) {
-                res.send(application)
+                res.status(201).send(application)
             }).catch(function (err) {
                 console.log(err);
-                res.send("Error in submitting the application")
+                res.status(500).send("Error in submitting the application")
             })
         }else{
-            res.send("Only Students can submit the Applications");
+            res.status(403).send("Only Students can submit the Applications");
         }
     })
 
@@ -58,7 +58,7 @@ router.get('/', function (req, res) {
     models.Job.findAll({
         where: {jobType: req.query.status}
     }).then(function (jobs) {
-        res.send(jobs);
+        res.status(200).send(jobs);
     }).catch(function (err) {
         console.log(err);
     })
