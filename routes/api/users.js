@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/me',function (req, res) {
-    console.log(req.User);
+    console.log(req.user);
     models.User.findOne({
         where: {id: req.user.id}
     }).then(function (user) {

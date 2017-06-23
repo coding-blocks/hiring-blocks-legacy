@@ -11,7 +11,7 @@ module.exports = new BearerStrategy(function (token, done) {
         },
         include: [{
             model: models.User,
-            include: [models.Student, models.CompanyManager, models.Admin]
+           include: [models.Student, models.CompanyManager, models.Admin]
         }]
     }).then(function (authToken) {
 
@@ -28,7 +28,7 @@ module.exports = new BearerStrategy(function (token, done) {
         // }
         else {
             console.log("12");
-            return done(null, {role: 'User', user: null});
+           return done(null, {role: 'User', user: null});
         }
     }).catch(function (err) {
         console.log("12");
