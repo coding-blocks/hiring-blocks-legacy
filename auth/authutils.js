@@ -1,10 +1,11 @@
+const models = require('./../db/models').models;
 
-function ensureLogin(fallbackPath) {
+function ensureLogin() {
 
     return function (req, res, next) {
 
         if (!req.user) {
-            res.redirect(fallbackPath)
+            res.send("Please login first");
         } else {
             next();
         }
@@ -13,36 +14,57 @@ function ensureLogin(fallbackPath) {
 
 
 
-function ensureCompanyManager(fallbackPath) {
+function ensureCompanyManager() {
 
     return function (req, res, next) {
 
-        if (req.user && req.user.companymanager) {
-            next()
+        if (req.user) {
+            models.CompanyManager.findOne({
+                where: {userId: req.user.id}
+            }).then(function (user) {
+                if(user)
+                    next();
+                else
+                    res.send("Only Company Managers Allowed");
+            })
         } else {
-            res.redirect(fallbackPath);
+            res.send("Please login first");
         }
     }
 }
 
-function ensureAdmin(fallbackPath) {
+function ensureAdmin() {
     return function (req, res, next) {
 
-        if (req.user && req.user.admin) {
-            next();
+        if (req.user) {
+            models.Admin.findOne({
+                where: {userId: req.user.id}
+            }).then(function (user) {
+                if(user)
+                    next();
+                else
+                    res.send("Only Admins Allowed");
+            })
         } else {
-            res.redirect(fallbackPath);
+            res.send("Please login first");
         }
     }
 }
 
-function ensureStudent(fallbackPath) {
+function ensureStudent() {
     return function (req, res, next) {
 
-        if (req.user && req.user.student) {
-            next();
+        if (req.user) {
+            models.Student.findOne({
+                where: {userId: req.user.id}
+            }).then(function (user) {
+                if(user)
+                    next();
+                else
+                    res.send("Only Students Allowed")
+            })
         } else {
-            res.redirect(fallbackPath);
+            res.send("Please login first");
         }
     }
 }
