@@ -4,10 +4,7 @@ const password = require('./../../utils/password');
 const passport = require('../../auth/passporthandler');
 const ensure = require('./../../auth/authutils');
 
-router.get('/', function (req, res) {
-    console.log("****************");
-    console.log(req.user.get());
-    console.log("***********************");
+router.get('/', ensure.ensureCompanyManager(),function (req, res) {
     models.User.findAll().then(function (users) {
         if (users)
             return res.send(users);

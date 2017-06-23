@@ -14,7 +14,7 @@ function ensureLogin(fallbackPath) {
 
 
 
-function ensureCompanyManager(fallbackPath) {
+function ensureCompanyManager() {
 
     return function (req, res, next) {
 
@@ -25,7 +25,7 @@ function ensureCompanyManager(fallbackPath) {
                 if(user)
                     next();
                 else
-                    res.redirect(fallbackPath)
+                    res.send("nopes");
             })
         } else {
             res.redirect(fallbackPath);
@@ -33,7 +33,7 @@ function ensureCompanyManager(fallbackPath) {
     }
 }
 
-function ensureAdmin(fallbackPath) {
+function ensureAdmin() {
     return function (req, res, next) {
 
         if (req.user) {
