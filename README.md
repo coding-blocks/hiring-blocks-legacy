@@ -1,9 +1,9 @@
 # Hiring Blocks
----
+
 CB Placements web portal for jobs and internships
 
 # Setup
----
+
 ## Clone the repository and install node packages
 > Please ensure you have the latest version of Nodejs and Node Package Manager (NPM) installed
 ```
@@ -12,7 +12,7 @@ cd hiring-blocks
 npm install
 ```
 ## Setting Up Postgres
----
+
 ### Configure the Database
 > Install Postgres, and use the following commands to setup the database and new role. The following commands are written as per the default configuration specified in secrets.json. You can change secrets.json to fit your preferences and modify the commands accordingly.
 ```
