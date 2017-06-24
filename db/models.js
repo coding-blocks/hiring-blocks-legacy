@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const secret = require('./../secret-sample.json');
+const secret = require('./../secrets.json');
 const db = new Sequelize(secret.DATABASE, secret.DB_USER, secret.DB_PASSWORD, {
     host: secret.DB_HOST,
     dialect: secret.DB_DIALECT
