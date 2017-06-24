@@ -1,0 +1,7 @@
+{
+    "name": "Hiring Blocks",
+    "description": "CB Placements web portal for jobs and internships",
+    "website": "http://codingblocks.com",
+    "repository": "https://github.com/coding-blocks/hiring-blocks",
+    "addons": ["heroku-postgresql:hobby-dev"]
+}

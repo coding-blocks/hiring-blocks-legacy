@@ -29,9 +29,6 @@ psql cbuser
 npm start
 ```
 
+# Heroku app
 
-
-
-
-
-
+> Running at: http://hiring-blocks.herokuapp.com
