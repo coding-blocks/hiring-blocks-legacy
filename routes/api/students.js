@@ -4,6 +4,7 @@ const password = require('./../../utils/password');
 const passport = require('./../../auth/passporthandler');
 const ensure = require('./../../auth/authutils');
 
+
 router.get('/', function (req, res) {
     models.Student.findAll({
         attributes: ['id', 'education'],

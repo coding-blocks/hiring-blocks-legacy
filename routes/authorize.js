@@ -10,6 +10,7 @@ route.post('/', (req, res) => {
         where: {
             email: req.body.email,
         },
+        //TODO: Do not join entire model, only get id attribute
         include: [models.UserLocal, models.Student, models.CompanyManager, models.Admin]
     }).then(function (user) {
         if (user) {
