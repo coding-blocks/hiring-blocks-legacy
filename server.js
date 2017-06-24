@@ -41,6 +41,10 @@ app.use('/api', apirouter);
 
 app.use('/', express.static(__dirname + '/public_html'));
 
-app.listen(process.env.PORT||4000, function () {
-    console.log("Listening on 4000");
+app.listen(process.env.PORT || 4000, function () {
+    if (process.env.PORT) {
+        console.log("Listening on " + process.env.PORT);
+    } else {
+        console.log("Listening on 4000");
+    }
 });
