@@ -35,7 +35,7 @@ const User = db.define('user', {
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
     pincode: Sequelize.STRING,
-    image:Sequelize.STRING
+    image: Sequelize.STRING
 });
 
 
@@ -67,6 +67,7 @@ User.hasOne(Admin);
 
 const Company = db.define('company', {
     name: Sequelize.STRING,
+    logo: Sequelize.STRING,
     website: Sequelize.STRING,
     locations: Sequelize.ARRAY(Sequelize.STRING),
     skills: Sequelize.ARRAY(Sequelize.STRING),
@@ -82,7 +83,7 @@ const Job = db.define("job", {
     skills: Sequelize.ARRAY(Sequelize.STRING),
     jobType: Sequelize.STRING,
     location: Sequelize.STRING,
-    stipend: Sequelize.STRING,
+    salary: Sequelize.STRING,
     active: Sequelize.BOOLEAN,
     startDate: Sequelize.STRING,
     endDate: Sequelize.STRING
