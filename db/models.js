@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const secret = require('./../secret-sample.json');
+const secret = require('./../secrets.json');
 
 const DATABASE_URL = process.env.DATABASE_URL || ('postgres://' + secret.DB_USER + ":" + secret.DB_PASSWORD + "@" + secret.DB_HOST + ":5432/" + secret.DATABASE);
 
