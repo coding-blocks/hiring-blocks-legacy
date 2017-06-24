@@ -6,7 +6,7 @@ const password = require('./../../utils/password');
 router.post('/add', function (req, res) {
 
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.send("Insufficient Details");
+        res.status(400).send("Insufficient Details");
     }
     models.Company.findOne({where: {name: req.body.companyName}}).then(function (company) {
         if (!company) {
@@ -30,12 +30,12 @@ router.post('/add', function (req, res) {
                         include: [models.userlocal, models.companymanager]
                     }).then(function (user) {
                         if (user)
-                            res.send("Student created");
+                            res.status(201).send("Student created");
                         else
-                            res.send("Could not create the student.");
+                            res.status(500).send("Could not create the student.");
                     }).catch(function (err) {
                         console.log(err);
-                        res.send("Could not create the student.");
+                        res.status(500).send("Could not create the student.");
                     })
                 })
             })
@@ -56,12 +56,12 @@ router.post('/add', function (req, res) {
                     include: [models.userlocal, models.companymanager]
                 }).then(function (user) {
                     if (user)
-                        res.send("Student created");
+                        res.status(201).send("Student created");
                     else
-                        res.send("Could not create the student.");
+                        res.status(500).send("Could not create the student.");
                 }).catch(function (err) {
                     console.log(err);
-                    res.send("Could not create the student.");
+                    res.status(500).send("Could not create the student.");
                 })
             })
         }
@@ -77,10 +77,10 @@ router.get('/:id', function (req, res) {
         where: {id: req.params.id},
         include: models.CompanyManager
     }).then(function (user) {
-        res.send(user);
+        res.status(200).send(user);
     }).catch(function (err) {
         console.log(err);
-        res.send('Unknown Comapny Manager');
+        res.status(500).send('Unknown Comapny Manager');
     })
 });
 
@@ -103,14 +103,14 @@ router.post('/:id/edit', function (req, res) {
             }, {where: {userId: userId}}).then(function (rows) {
                 if (rows[0] !== 0) {
                     const manager = rows[1][0].get();
-                    return res.send(manager);
+                    return res.status(200).send(manager);
                 }
-                return res.send({success: 'false'});
+                return res.status(200).send({success: 'false'});
             }).catch(function (err) {
-                return res.send({success: 'false'});
+                return res.status(500).send({success: 'false'});
             })
         }).catch(function (err) {
-            return res.send({success: 'false'});
+            return res.status(500).send({success: 'false'});
         });
     });
 
@@ -120,9 +120,10 @@ router.get('/', function (req, res) {
     models.CompanyManager.findAll({
         include: [models.User, models.Company]
     }).then(function (manager) {
-        res.send(manager);
+        res.status(200).send(manager);
     }).catch(function (error) {
         console.log(error);
+        res.status(500).send("Error");
     })
 });
 

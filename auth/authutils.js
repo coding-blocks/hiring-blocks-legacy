@@ -5,7 +5,7 @@ function ensureLogin() {
     return function (req, res, next) {
 
         if (!req.user) {
-            res.send("Please login first");
+            res.status(401).send("Please login first");
         } else {
             next();
         }
@@ -25,10 +25,10 @@ function ensureCompanyManager() {
                 if(user)
                     next();
                 else
-                    res.send("Only Company Managers Allowed");
+                    res.status(401).send("Only Company Managers Allowed");
             })
         } else {
-            res.send("Please login first");
+            res.status(401).send("Please login first");
         }
     }
 }
@@ -43,10 +43,10 @@ function ensureAdmin() {
                 if(user)
                     next();
                 else
-                    res.send("Only Admins Allowed");
+                    res.status(401).send("Only Admins Allowed");
             })
         } else {
-            res.send("Please login first");
+            res.status(401).send("Please login first");
         }
     }
 }
@@ -61,10 +61,10 @@ function ensureStudent() {
                 if(user)
                     next();
                 else
-                    res.send("Only Students Allowed")
+                    res.status(401).send("Only Students Allowed")
             })
         } else {
-            res.send("Please login first");
+            res.status(401).send("Please login first");
         }
     }
 }

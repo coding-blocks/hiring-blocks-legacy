@@ -7,12 +7,12 @@ const ensure = require('./../../auth/authutils');
 router.get('/', ensure.ensureAdmin(),function (req, res) {
     models.User.findAll().then(function (users) {
         if (users)
-            return res.send(users);
+            return res.status(200).send(users);
         else
-            return res.send("No users");
+            return res.status(404).send("No users");
     }).catch(function (err) {
         console.log(err);
-        return res.send("Could not get the users");
+        return res.status(500).send("Could not get the users");
     })
 });
 
@@ -22,12 +22,12 @@ router.get('/me', function (req, res) {
         where: {id: req.user.id}
     }).then(function (user) {
         if (user)
-            return res.send(user);
+            return res.status(200).send(user);
         else
-            return res.send("Could not send the details");
+            return res.status(404).send("Could not send the details");
     }).catch(function (err) {
         console.log(err);
-        return res.send("Could not get the user");
+        return res.status(500).send("Could not get the user");
     })
 });
 
@@ -36,12 +36,12 @@ router.get('/:id', ensure.ensureAdmin,function (req, res) {
         where: {id: req.params.id}
     }).then(function (user) {
         if (user)
-            return res.send(user);
+            return res.status(200).send(user);
         else
-            return res.send("No user with this id exists");
+            return res.status(404).send("No user with this id exists");
     }).catch(function (err) {
         console.log(err);
-        return res.send("Could not get the user");
+        return res.status(500).send("Could not get the user");
     })
 });
 
@@ -50,13 +50,13 @@ router.get('/me/student', function (req, res) {
         where: {userId: req.user.id},
     }).then(function (student) {
         if (!student) {
-            return res.send("You are not a Student.");
+            return res.status(404).send("You are not a Student.");
         }
-        return res.send(student);
+        return res.status(200).send(student);
 
     }).catch(function (err) {
         console.log(err);
-        return res.send('Could not get the Student details');
+        return res.status(500).send('Could not get the Student details');
     })
 });
 
@@ -65,13 +65,13 @@ router.get('/me/companymanager', function (req, res) {
         where: {id: req.user.id},
     }).then(function (companymanager) {
         if (companymanager) {
-            return res.send(companymanager);
+            return res.status(200).send(companymanager);
         }
         else
-            return res.send("You are not a Company Manager.");
+            return res.status(404).send("You are not a Company Manager.");
     }).catch(function (err) {
         console.log(err);
-        return res.send('Could not get the Company Manager details');
+        return res.status(500).send('Could not get the Company Manager details');
     })
 });
 
@@ -80,13 +80,13 @@ router.get('/me/admin', function (req, res) {
         where: {id: req.user.id},
     }).then(function (admin) {
         if (admin) {
-            return res.send(admin);
+            return res.status(200).send(admin);
         }
         else
-            return res.send("You are not an Admin.");
+            return res.status(404).send("You are not an Admin.");
     }).catch(function (err) {
         console.log(err);
-        return res.send('Could not get the admin details');
+        return res.status(500).send('Could not get the admin details');
     })
 });
 
@@ -110,13 +110,13 @@ router.post('/me/student/create', function (req, res) {
         userId: userId
     }).then(function (student) {
         if (student)
-            return res.send("Student created");
+            return res.status(201).send("Student created");
         else
-            return res.send("could not create the student");
+            return res.status(500).send("could not create the student");
 
     }).catch(function (err) {
         console.log(err);
-        return res.send("could not create the student");
+        return res.status(500).send("could not create the student");
     });
 });
 
@@ -132,13 +132,13 @@ router.post('/me/companymanager/create', function (req, res) {
                 userId: userId
             }).then(function (companymanager) {
                 if (companymanager)
-                    return res.send("Companymanager created");
+                    return res.status(201).send("Companymanager created");
                 else
-                    return res.send("could not create the companymanager");
+                    return res.status(500).send("could not create the companymanager");
 
             }).catch(function (err) {
                 console.log(err);
-                return res.send("could not create the companymanager");
+                return res.status(500).send("could not create the companymanager");
             });
         } else {
             console.log(companyName);
@@ -152,20 +152,20 @@ router.post('/me/companymanager/create', function (req, res) {
                         userId: userId
                     }).then(function (companymanager) {
                         if (companymanager)
-                            return res.send("Companymanager created");
+                            return res.status(201).send("Companymanager created");
                         else
-                            return res.send("could not create the companymanager");
+                            return res.status(500).send("could not create the companymanager");
                     }).catch(function (err) {
                         console.log(err);
-                        return res.send("could not create the companymanager");
+                        return res.status(500).send("could not create the companymanager");
                     });
                 } else
-                    return res.send("could not create the companymanager");
+                    return res.status(500).send("could not create the companymanager");
             })
         }
     }).catch(function (err) {
         console.log(err);
-        return res.send("could not create the company manager");
+        return res.status(500).send("could not create the company manager");
     });
 
 });

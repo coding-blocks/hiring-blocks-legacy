@@ -22,7 +22,7 @@ route.get('/admin', (req, res) => {
 
 route.post('/student', (req, res) => {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.send("Insufficient Details");
+        res.status(403).send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
         console.log(password);
@@ -41,23 +41,23 @@ route.post('/student', (req, res) => {
             include: [models.Student]
         }).then(function (studentLocal) {
             if (studentLocal) {
-                res.send({success: 'true'});
+                res.status(200).send({success: 'true'});
             } else {
-                res.send({success: 'false'})
+                res.status(404).send({success: 'false'})
             }
         }).catch(function (err) {
             console.log(err);
-            res.send({success: 'error'});
+            res.status(500).send({success: 'error'});
         })
     }).catch(function (err) {
         console.log(err);
-        res.send({success: 'error'});
+        res.status(500).send({success: 'error'});
     })
 });
 
 route.post('/company', (req, res) => {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.send("Insufficient Details");
+        res.status(403).send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
         models.UserLocal.create({
@@ -74,23 +74,23 @@ route.post('/company', (req, res) => {
             include: [models.Company]
         }).then(function (companyLocal) {
             if (companyLocal) {
-                res.send({success: 'true'});
+                res.status(201).send({success: 'true'});
             } else {
-                res.send({success: 'false'})
+                res.status(400).send({success: 'false'})
             }
         }).catch(function (err) {
             console.log(err);
-            res.send({success: 'error'});
+            res.status(500).send({success: 'error'});
         })
     }).catch(function (err) {
         console.log(err);
-        res.send({success: 'error'});
+        res.status(500).send({success: 'error'});
     })
 });
 
 route.post('/admin', (req, res) => {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.send("Insufficient Details");
+        res.status(403).send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
         models.UserLocal.create({
@@ -107,23 +107,23 @@ route.post('/admin', (req, res) => {
             include: [models.Admin]
         }).then(function (adminLocal) {
             if (adminLocal) {
-                res.send({success: 'true'});
+                res.status(201).send({success: 'true'});
             } else {
-                res.send({success: 'false'})
+                res.status(400).send({success: 'false'})
             }
         }).catch(function (err) {
             console.log(err);
-            res.send({success: 'error'});
+            res.status(500).send({success: 'error'});
         })
     }).catch(function (err) {
         console.log(err);
-        res.send({success: 'error'});
+        res.status(500).send({success: 'error'});
     })
 });
 
 route.post('/user', function (req, res) {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.send("Insufficient Details");
+        res.status(403).send("Insufficient Details");
     }
     password.pass2hash(req.body.password).then(function (hash) {
         console.log(password);
@@ -137,17 +137,17 @@ route.post('/user', function (req, res) {
                 include: [models.UserLocal]
             }).then(function (user) {
             if (user) {
-                res.send({success: 'true'});
+                res.status(201).send({success: 'true'});
             } else {
-                res.send({success: 'false'})
+                res.status(400).send({success: 'false'})
             }
         }).catch(function (err) {
             console.log(err);
-            res.send({success: 'error'});
+            res.status(500).send({success: 'error'});
         })
     }).catch(function (err) {
         console.log(err);
-        res.send({success: 'error'});
+        res.status(500).send({success: 'error'});
     })
 });
 

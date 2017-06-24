@@ -35,6 +35,7 @@ const User = db.define('user', {
     contact: Sequelize.STRING,
     email: Sequelize.STRING,
     pincode: Sequelize.STRING,
+    image:Sequelize.STRING
 });
 
 
