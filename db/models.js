@@ -5,8 +5,7 @@ const DATABASE_URL = process.env.DATABASE_URL || ('postgres://' + secret.DB_USER
 
 
 const db = new Sequelize(DATABASE_URL, {
-    host: secret.DB_HOST,
-    dialect: secret.DB_DIALECT
+    dialect: 'postgres'
 });
 
 
