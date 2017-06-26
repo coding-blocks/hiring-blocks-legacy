@@ -5,6 +5,14 @@ const express = require('express')
     , cookieParser = require('cookie-parser')
     , cors = require('cors');
 
+var secrets;
+try {
+    secrets = require('./secrets.json')
+} catch (e) {
+    console.error('Create your own secrets file lazybones');
+    secrets = require('./secret-sample.json')
+}
+
 const app = express();
 const apirouter = require('./routes/api')
     , loginrouter = require('./routes/login')

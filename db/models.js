@@ -1,5 +1,12 @@
 const Sequelize = require('sequelize');
-const secret = require('./../secrets.json');
+
+var secret;
+try {
+  secret = require('../secrets.json')
+} catch (e) {
+  console.error('Create your own secrets file lazybones');
+  secret = require('../secret-sample.json')
+}
 
 const DATABASE_URL = process.env.DATABASE_URL || ('postgres://' + secret.DB_USER + ":" + secret.DB_PASSWORD + "@" + secret.DB_HOST + ":5432/" + secret.DATABASE);
 
