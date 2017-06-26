@@ -3,7 +3,8 @@ const express = require('express')
     , session = require('express-session')
     , passport = require('./auth/passporthandler')
     , cookieParser = require('cookie-parser')
-    , secrets = require('./secret-sample.json');
+    , secrets = require('./secret-sample.json')
+    , cors = require('cors');
 
 const app = express();
 const apirouter = require('./routes/api')
@@ -17,6 +18,7 @@ const ensure = require('./auth/authutils');
 
 app.set("view engine", 'hbs');
 
+app.use(cors());
 app.use(cookieParser(secrets.EXPRESS_SESSIONS_SECRET));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
