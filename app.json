@@ -1,0 +1,11 @@
+{
+  "name": "Hiring Blocks",
+  "description": "Plcaement portal for Coding Blocks",
+  "keywords": [
+    "nodejs",
+    "passport",
+    "express"
+  ],
+  "repository": "https://github.com/coding-blocks/hiring-blocks",
+  "addons": ["heroku-postgresql:hobby-dev"]
+}

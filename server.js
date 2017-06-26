@@ -3,7 +3,7 @@ const express = require('express')
     , session = require('express-session')
     , passport = require('./auth/passporthandler')
     , cookieParser = require('cookie-parser')
-    , secrets = require('./secret-sample.json');
+    , secrets = require('./secrets.json');
 
 const app = express();
 const apirouter = require('./routes/api')
@@ -41,6 +41,6 @@ app.use('/api', apirouter);
 
 app.use('/', express.static(__dirname + '/public_html'));
 
-app.listen(4000, function () {
-    console.log("Listening on 4000");
+app.listen(process.env.PORT || 4000, function () {
+    console.log("Listening on " + (process.env.PORT || 4000));
 });
