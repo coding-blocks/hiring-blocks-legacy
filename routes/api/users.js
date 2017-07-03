@@ -4,7 +4,7 @@ const password = require('./../../utils/password');
 const passport = require('../../auth/passporthandler');
 const ensure = require('./../../auth/authutils');
 
-router.get('/',ensure.ensureAdmin(),function (req, res) {
+router.get('/', ensure.ensureAdmin(), function (req, res) {
     models.User.findAll().then(function (users) {
         if (users)
             return res.status(200).send(users);
@@ -31,9 +31,9 @@ router.get('/me', function (req, res) {
     })
 });
 
-router.get('/:id', ensure.ensureAdmin,function (req, res) {
+router.get('/:id', ensure.ensureAdmin(), function (req, res) {
     models.User.findOne({
-        where: {id: req.params.id}
+        where: {id: parseInt(req.params.id)}
     }).then(function (user) {
         if (user)
             return res.status(200).send(user);

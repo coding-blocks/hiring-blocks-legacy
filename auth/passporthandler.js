@@ -7,7 +7,7 @@ const bearerStrategy = require('./strategies/bearer/bearerStrategy');
 
 passport.serializeUser(function (user, cb) {
     if (!user) {
-        return cb(null, false);
+        return cb(null, false)
     }
     return cb(null, user.id);
 });
