@@ -7,7 +7,7 @@ route.get('/', (req, res) => {
   console.log(1);
   models.AuthToken.destroy({
     where: {
-      token: req.headers["Authorization"].split('Bearer ')[1],
+      token: req.headers["authorization"].split('Bearer ')[1],
     },
   }).then(function (match) {
     if (match) {
