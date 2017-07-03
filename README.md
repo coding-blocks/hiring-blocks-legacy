@@ -1,5 +1,5 @@
 # Hiring Blocks
-[![Heroku](http://heroku-badge.herokuapp.com/?app=cb-hb-dev)](http://cb-hb-dev.herokuapp.com/login)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=cb-hb-dev)](http://cb-hb-dev.herokuapp.com)
 
 CB Placements web portal for jobs and internships
 
@@ -29,11 +29,3 @@ psql cbuser
 ```
 npm start
 ```
-
-# Running at Heroku
-URL : https://whispering-garden-72461.herokuapp.com/signup
-
-
-
-
-
