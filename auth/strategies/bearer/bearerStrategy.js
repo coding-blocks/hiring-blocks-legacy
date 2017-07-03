@@ -1,7 +1,11 @@
 const BearerStrategy = require('passport-http-bearer').Strategy;
 const models = require('./../../../db/models').models;
+const config = require('./../../../config');
 
 module.exports = new BearerStrategy(function (token, done) {
+    if (config.DEV_MODE) {
+        return done(null, {id: 1, name: "Admin"});
+    }
     if (token === null || token === undefined) {
         return done(null, false, {message: 'Could not authorize'});
     }
