@@ -67,12 +67,12 @@ router.post('/:id/edit', function (req, res) {
                 const admin = rows[1][0].get();
                 res.status(200).send(admin);
             }
-            return res.status(200).send({success: 'false'});
+            return res.status(200).send({success: false});
         }).catch(function (err) {
-            return res.status(500).send({success: 'false'});
+            return res.status(500).send({success: false});
         })
     }).catch(function (err) {
-        return res.status(500).send({success: 'false'});
+        return res.status(500).send({success: false});
     });
 });
 

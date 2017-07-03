@@ -18,7 +18,7 @@ route.get('/', (req, res) => {
     }
   }).catch(function (err) {
     console.log(err);
-    res.status(500).send({success: 'false'})
+    res.status(500).send({success: false})
   })
 });
 

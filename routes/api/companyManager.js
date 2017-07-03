@@ -134,12 +134,12 @@ router.put('/:id/edit', passport.authenticate('bearer'), ensure.ensureAdmin(), f
                     // const manager = rows[1][0].get();
                     return res.status(200).send("Updated");
                 // }
-                // return res.status(200).send({success: 'false'});
+                // return res.status(200).send({success: false});
             }).catch(function (err) {
-                return res.status(500).send({success: 'false'});
+                return res.status(500).send({success: false});
             })
         }).catch(function (err) {
-            return res.status(500).send({success: 'false'});
+            return res.status(500).send({success: false});
         });
     });
 

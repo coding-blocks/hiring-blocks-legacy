@@ -1,25 +1,27 @@
 const express = require('express')
-    , bodyParser = require('body-parser')
-    , session = require('express-session')
-    , passport = require('./auth/passporthandler')
-    , cookieParser = require('cookie-parser')
-    , cors = require('cors');
+  , bodyParser = require('body-parser')
+  , session = require('express-session')
+  , passport = require('./auth/passporthandler')
+  , cookieParser = require('cookie-parser')
+  , cors = require('cors');
 
 var secrets;
 try {
-    secrets = require('./secrets.json')
+  secrets = require('./secrets.json')
 } catch (e) {
-    console.error('Create your own secrets file lazybones');
-    secrets = require('./secret-sample.json')
+  console.error('Create your own secrets file lazybones');
+  secrets = require('./secret-sample.json')
 }
 
 const app = express();
 const apirouter = require('./routes/api')
-    , loginrouter = require('./routes/login')
-    , logoutrouter = require('./routes/logout')
-    , signuprouter = require('./routes/signup')
-    , authorizerouter = require('./routes/authorize')
-    , profilerouter = require('./routes/profile');
+  , loginrouter = require('./routes/login')
+  , logoutrouter = require('./routes/logout')
+  , signuprouter = require('./routes/signup')
+  , authorizerouter = require('./routes/authorize')
+  , profilerouter = require('./routes/profile')
+  , unauthorizerouter = require('./routes/unauthorize')
+
 
 const ensure = require('./auth/authutils');
 
@@ -31,9 +33,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(session({
-    secret: secrets.EXPRESS_SESSIONS_SECRET,
-    resave: false,
-    saveUninitialized: false
+  secret: secrets.EXPRESS_SESSIONS_SECRET,
+  resave: false,
+  saveUninitialized: false
 }));
 
 app.use(passport.initialize());
@@ -44,6 +46,7 @@ app.use('/login', loginrouter);
 app.use('/profile', profilerouter);
 app.use('/logout', logoutrouter);
 app.use('/authorize', authorizerouter);
+app.use('/unauthorize', unauthorizerouter);
 
 
 app.use('/api', apirouter);
@@ -51,5 +54,5 @@ app.use('/api', apirouter);
 app.use('/', express.static(__dirname + '/public_html'));
 
 app.listen(process.env.PORT || 4000, function () {
-    console.log("Listening on " + (process.env.PORT || 4000));
+  console.log("Listening on " + (process.env.PORT || 4000));
 });

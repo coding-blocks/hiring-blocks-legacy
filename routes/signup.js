@@ -41,9 +41,9 @@ route.post('/student', (req, res) => {
             include: [models.Student]
         }).then(function (studentLocal) {
             if (studentLocal) {
-                res.status(200).send({success: 'true'});
+                res.status(200).send({success: true});
             } else {
-                res.status(404).send({success: 'false'})
+                res.status(404).send({success: false})
             }
         }).catch(function (err) {
             console.log(err);
@@ -74,9 +74,9 @@ route.post('/company', (req, res) => {
             include: [models.Company]
         }).then(function (companyLocal) {
             if (companyLocal) {
-                res.status(201).send({success: 'true'});
+                res.status(201).send({success: true});
             } else {
-                res.status(400).send({success: 'false'})
+                res.status(400).send({success: false})
             }
         }).catch(function (err) {
             console.log(err);
@@ -107,9 +107,9 @@ route.post('/admin', (req, res) => {
             include: [models.Admin]
         }).then(function (adminLocal) {
             if (adminLocal) {
-                res.status(201).send({success: 'true'});
+                res.status(201).send({success: true});
             } else {
-                res.status(400).send({success: 'false'})
+                res.status(400).send({success: false})
             }
         }).catch(function (err) {
             console.log(err);
@@ -137,9 +137,9 @@ route.post('/user', function (req, res) {
                 include: [models.UserLocal]
             }).then(function (user) {
             if (user) {
-                res.status(201).send({success: 'true'});
+                res.status(201).send({success: true});
             } else {
-                res.status(400).send({success: 'false'})
+                res.status(400).send({success: false})
             }
         }).catch(function (err) {
             console.log(err);

@@ -76,7 +76,7 @@ router.put('/:id', passport.authenticate('bearer'), ensure.ensureAdmin('/'), fun
         if (!student) {
             return res.status(404).send({code: "404", error: {message: "Could not find the student"}})
         }
-        return res.status(200).send({success: 'true', student});
+        return res.status(200).send({success: true, student});
     }).catch(function (err) {
         console.log(err);
         return res.status(500).send({code: "500", error: {message: "Database Error"}})

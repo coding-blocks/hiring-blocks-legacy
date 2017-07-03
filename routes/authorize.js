@@ -23,29 +23,29 @@ route.post('/', (req, res) => {
                     }).then(function (authToken) {
                         console.log(4);
                         res.status(200).send({
-                            success: 'true',
+                            success: true,
                             token: authToken.token
                         })
                     }).catch(function (err) {
                         console.log(5);
                         console.log(err);
-                        res.status(500).send({success: 'false'})
+                        res.status(500).send({success: false})
                     })
                 } else {
-                    res.status(401).send({success: 'false', message: 'Incorrect Password'})
+                    res.status(401).send({success: false, message: 'Incorrect Password'})
                 }
             }).catch(function (err) {
                 console.log(err);
-                res.status(500).send({success: 'false'})
+                res.status(500).send({success: false})
             })
         } else {
             res.status(401).send({
-                success: 'false', message: 'Incorrect Email'
+                success: false, message: 'Incorrect Email'
             })
         }
     }).catch(function (err) {
         console.log(err);
-        res.status(500).send({success: 'false'})
+        res.status(500).send({success: false})
     })
 });
 
