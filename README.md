@@ -1,5 +1,5 @@
 # Hiring Blocks
-[![Heroku](http://heroku-badge.herokuapp.com/?app=cb-hb-dev&root=login)](http://cb-hb-dev.herokuapp.com/login)
+[![Heroku](http://heroku-badge.herokuapp.com/?app=cb-hb-dev)](http://cb-hb-dev.herokuapp.com/login)
 
 CB Placements web portal for jobs and internships
 
