@@ -41,6 +41,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+app.get('/', function (req, res) {
+  res.status(200).send({
+    running: true
+  })
+});
+
 app.use('/signup', signuprouter);
 app.use('/login', loginrouter);
 app.use('/profile', profilerouter);
@@ -51,7 +58,7 @@ app.use('/unauthorize', unauthorizerouter);
 
 app.use('/api', apirouter);
 
-app.use('/', express.static(__dirname + '/public_html'));
+// app.use('/', express.static(__dirname + '/public_html'));
 
 app.listen(process.env.PORT || 4000, function () {
   console.log("Listening on " + (process.env.PORT || 4000));
