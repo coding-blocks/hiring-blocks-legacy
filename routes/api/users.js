@@ -62,7 +62,7 @@ router.get('/me/student', function (req, res) {
 
 router.get('/me/companymanager', function (req, res) {
     models.CompanyManager.findOne({
-        where: {id: req.user.id},
+        where: {userId: req.user.id},
     }).then(function (companymanager) {
         if (companymanager) {
             return res.status(200).send(companymanager);
@@ -94,7 +94,7 @@ router.post('/me/student/create', function (req, res) {
     let userId = parseInt(req.user.id),
         education = req.body.education,
         skills = req.body.skills,
-        languages = req.body.languages,
+      compLanguages = req.body.compLanguages,
         projects = req.body.projects,
         trainings = req.body.trainings,
         cbStudent = req.body.cbStudent,
@@ -102,7 +102,7 @@ router.post('/me/student/create', function (req, res) {
     models.Student.create({
         education: education,
         skills: skills,
-        languages: languages,
+      compLanguages: compLanguages,
         projects: projects,
         trainings: trainings,
         cbStudent: cbStudent,
@@ -123,11 +123,11 @@ router.post('/me/student/create', function (req, res) {
 router.post('/me/companymanager/create', function (req, res) {
     let userId = parseInt(req.user.id),
         designation = req.body.designation,
-        companyName = req.body.company;
+        companyName = req.body.companyName;
     models.Company.findOne({where: {name: companyName}}).then(function (company) {
         if (company) {
             models.CompanyManager.create({
-                designaton: designation,
+                designation: designation,
                 companyId: company.id,
                 userId: userId
             }).then(function (companymanager) {
@@ -147,7 +147,7 @@ router.post('/me/companymanager/create', function (req, res) {
             }).then(function (companyobj) {
                 if (companyobj) {
                     models.CompanyManager.create({
-                        designaton: designation,
+                        designation: designation,
                         companyId: companyobj.id,
                         userId: userId
                     }).then(function (companymanager) {

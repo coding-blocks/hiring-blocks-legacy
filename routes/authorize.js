@@ -14,6 +14,7 @@ route.post('/', (req, res) => {
         include: [models.UserLocal, models.Student, models.CompanyManager, models.Admin]
     }).then(function (user) {
         if (user) {
+            console.log(user.get())
             password.compare2hash(req.body.password, user.userlocal.password).then(function (match) {
                 if (match) {
                     models.AuthToken.create({

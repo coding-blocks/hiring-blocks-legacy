@@ -3,8 +3,9 @@ const passport = require('../../auth/passporthandler');
 const config = require('./../../config');
 
 router.use('/students', require('./students'));
-router.use('/companymanager', require('./companyManager'));
-router.use('/admin', require('./admin'));
+
+router.use('/companymanagers', require('./companyManager'));
+router.use('/admins', require('./admin'));
 router.use('/companies', require('./companies'));
 router.use('/jobs', require('./jobs'));
 router.use('/users', passport.authenticate('bearer'), require('./users'));

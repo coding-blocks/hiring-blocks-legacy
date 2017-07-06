@@ -89,8 +89,8 @@ router.post('/add', passport.authenticate('bearer'), ensure.ensureAdmin(), funct
 
 router.get('/', function (req, res) {
     models.CompanyManager.findAll({
-        attributes: [designation],
-        include: [{model: models.User, attributes: ['id','name', 'img']},
+        attributes: ['designation'],
+        include: [{model: models.User, attributes: ['id','name', 'image']},
             {model: models.Company, attributes: ['name']  }]
         }).then(function (managers) {
         res.status(200).send(managers);

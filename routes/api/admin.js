@@ -2,7 +2,7 @@ const router = require('express').Router();
 const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 
-
+//FIXME : Incorrect
 router.post('/add', function (req, res) {
     if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
         res.status(403).send("Insufficient Details");
@@ -20,7 +20,7 @@ router.post('/add', function (req, res) {
                 cbCentre: req.body.cbCentre,
                 cbDesignation: req.body.cbDesignation
             },
-            include: [models.userlocal, models.Admin]
+            include: [models.UserLocal, models.Admin]
         }).then(function (user) {
             if (user)
                 res.status(201).send("Admin created");
