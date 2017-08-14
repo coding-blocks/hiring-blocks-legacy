@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/apoorvaagupta/Hiring-Bocks#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
