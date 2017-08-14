@@ -1,10 +1,10 @@
-
 const express = require('express')
   , bodyParser = require('body-parser')
   , session = require('express-session')
   , passport = require('./auth/passporthandler')
   , cookieParser = require('cookie-parser')
-  , cors = require('cors');
+  , cors = require('cors')
+  , db = require('./db/models').db;
 
 var secrets;
 try {
@@ -59,8 +59,4 @@ app.use('/unauthorize', unauthorizerouter);
 
 app.use('/api', apirouter);
 
-// app.use('/', express.static(__dirname + '/public_html'));
-
-app.listen(process.env.PORT || 4000, function () {
-  console.log("Listening on " + (process.env.PORT || 4000));
-});
+module.exports = app;
