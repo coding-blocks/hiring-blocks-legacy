@@ -5,7 +5,7 @@ const password = require('../utils/password');
 const axios = require('axios');
 const secrets = require('./../secrets.json');
 
-router.post('/', (req, res) => {
+route.post('/', (req, res) => {
   axios.post('https://account.codingblocks.com/oauth/token', {
     "client_id": secrets.CLIENT_ID,
     "redirect_uri": secrets.REDIRECT_URI,
