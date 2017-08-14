@@ -45,13 +45,8 @@ const User = db.define('user', {
   contact: Sequelize.STRING,
   email: Sequelize.STRING,
   pincode: Sequelize.STRING,
-  image: Sequelize.STRING
-});
-
-
-const UserLocal = db.define('userlocal', {
-  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
-  password: Sequelize.STRING,
+  image: Sequelize.STRING,
+  role: Sequelize.STRING
 });
 
 const AuthToken = db.define('authtoken', {
@@ -73,6 +68,16 @@ CompanyManager.belongsTo(User);
 User.hasOne(CompanyManager);
 Admin.belongsTo(User);
 User.hasOne(Admin);
+
+const OneAuth = db.define('authtoken', {
+  id: {type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true},
+  oneauthId: Sequelize.INTEGER,
+  oneauthToken: Sequelize.STRING,
+  token: Sequelize.STRING
+});
+
+OneAuth.belongsTo(User);
+User.hasMany(OneAuth);
 
 
 const Company = db.define('company', {
@@ -128,6 +133,6 @@ db.sync({force: false}).then(() => {
 module.exports = {
   models: {
     Student, CompanyManager, Admin, User, UserLocal, AuthToken,
-    Company, Job, Application
+    Company, Job, Application, OneAuth
   }
 };
