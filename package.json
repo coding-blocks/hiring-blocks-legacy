@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "node_modules/.bin/_mocha",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -34,5 +34,11 @@
     "pg-hstore": "^2.3.2",
     "sequelize": "^4.2.0",
     "uid2": "0.0.3"
+  },
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.5.0",
+    "request": "^2.81.0"
   }
 }

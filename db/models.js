@@ -57,8 +57,6 @@ const AuthToken = db.define('authtoken', {
   role: Sequelize.STRING
 });
 
-UserLocal.belongsTo(User);
-User.hasOne(UserLocal);
 AuthToken.belongsTo(User);
 User.hasMany(AuthToken);
 
@@ -125,14 +123,10 @@ User.hasMany(Application);
 Application.belongsTo(Job);
 Job.hasMany(Application);
 
-
-db.sync({force: false}).then(() => {
-  console.log('Database configured')
-});
-
 module.exports = {
   models: {
-    Student, CompanyManager, Admin, User, UserLocal, AuthToken,
+    Student, CompanyManager, Admin, User, AuthToken,
     Company, Job, Application, OneAuth
-  }
+  },
+  db: db
 };
