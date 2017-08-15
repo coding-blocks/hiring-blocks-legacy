@@ -4,7 +4,10 @@ const password = require('./../../utils/password');
 const ensure = require('./../../auth/authutils');
 const passport = require('./../../auth/passporthandler');
 
-router.post('/add', passport.authenticate('bearer'),function (req, res) {
+router.post('/add', config.DEV_MODE ? function(req,res,next){
+    req.user= {id:1};
+    next();}
+  :passport.authenticate('bearer'),function (req, res) {
     const companyId=parseInt(req.body.companyId);
 
   if (req.user) {

@@ -7,7 +7,7 @@ const config = require('./../../config');
 
 
 router.post('/add', config.DEV_MODE ? function(req,res,next){
-      req.user.id = 1;
+      req.user= {id:1};
       next();}
   :passport.authenticate('bearer'), ensure.ensureAdmin(), function (req, res) {
   if (req.body.name === "") {
