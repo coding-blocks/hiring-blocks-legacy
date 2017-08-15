@@ -3,7 +3,7 @@ const models = require('./../db/models').models;
 
 const localStrategy = require('./strategies/local/localStrategy');
 const bearerStrategy = require('./strategies/bearer/bearerStrategy');
-
+const config = require('./../config');
 
 passport.serializeUser(function (user, cb) {
     if (!user) {
