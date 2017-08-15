@@ -39,7 +39,6 @@ router.get('/', function (req, res) {
     })
 });
 
-
 router.get('/:id', function (req, res) {
     models.CompanyManager.findOne({
         where: {userId: req.params.id},

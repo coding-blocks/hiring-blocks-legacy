@@ -25,7 +25,7 @@ describe("/api", function () {
   });
   importTest("/", './api/index.js');
   // importTest("/companymanagers", './api/companymanagers.js')
-  // importTest("/users", './api/users.js')
+  importTest("/users", './api/users.js')
   // importTest("/students", './api/students.js')
   // importTest("/admins", "./api/admins.js");
   // importTest("/companies", "./api/companies.js");
