@@ -4,72 +4,11 @@ const password = require('./../../utils/password');
 const ensure = require('./../../auth/authutils');
 const passport = require('./../../auth/passporthandler');
 
-router.post('/add', passport.authenticate('bearer'), ensure.ensureAdmin(), function (req, res) {
+router.post('/add', function (req, res) {
 
-    // if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-    //     res.status(400).send("Insufficient Details");
-    // }
-    // models.Company.findOne({where: {name: req.body.companyName}}).then(function (company) {
-    //     if (!company) {
-    //         models.Company.create({
-    //             name: req.body.companyName,
-    //             website: req.body.companyWebsite
-    //         }).then(function (company) {
-    //             password.pass2hash(req.body.password).then(function (hash) {
-    //                 models.User.create({
-    //                     name: req.body.name,
-    //                     email: req.body.email,
-    //                     contact: req.body.contact,
-    //                     pincode: req.body.pincode,
-    //                     userlocal: {
-    //                         password: hash
-    //                     },
-    //                     companymanager: {
-    //                         designation: req.body.designation,
-    //                         companyId: company.id
-    //                     },
-    //                     include: [models.userlocal, models.companymanager]
-    //                 }).then(function (user) {
-    //                     if (user)
-    //                         res.status(201).send("Student created");
-    //                     else
-    //                         res.status(500).send("Could not create the student.");
-    //                 }).catch(function (err) {
-    //                     console.log(err);
-    //                     res.status(500).send("Could not create the student.");
-    //                 })
-    //             })
-    //         })
-    //     } else {
-    //         password.pass2hash(req.body.password).then(function (hash) {
-    //             models.User.create({
-    //                 name: req.body.name,
-    //                 email: req.body.email,
-    //                 contact: req.body.contact,
-    //                 pincode: req.body.pincode,
-    //                 userlocal: {
-    //                     password: hash
-    //                 },
-    //                 companymanager: {
-    //                     designation: req.body.designation,
-    //                     companyId: company.id
-    //                 },
-    //                 include: [models.userlocal, models.companymanager]
-    //             }).then(function (user) {
-    //                 if (user)
-    //                     res.status(201).send("Student created");
-    //                 else
-    //                     res.status(500).send("Could not create the student.");
-    //             }).catch(function (err) {
-    //                 console.log(err);
-    //                 res.status(500).send("Could not create the student.");
-    //             })
-    //         })
-    //     }
-    // }).catch(function (err) {
-    //     console.log(err);
-    // })
-
+  if (!req.body.userId === true) {
+    res.status(400).send("Please login first");
+  }
     models.CompanyManager.create({
         companyId: req.body.companyId,
         userId: req.body.userId,

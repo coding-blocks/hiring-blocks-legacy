@@ -10,7 +10,7 @@ router.get('/', function (req, res) {
         attributes: ['id', 'education'],
         include: [{
             model: models.User,
-            attributes: ['image', 'name']
+            attributes: ['id','image', 'name']
         }]
     }).then(function (students) {
         res.status(200).send(students.map((i) => i.get()));
