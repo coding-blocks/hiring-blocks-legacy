@@ -13,15 +13,17 @@ route.post('/', (req, res) => {
     "grant_type": secrets.GRANT_TYPE,
     "code": req.body.code
   }).then(function (authtoken) {
-    models.Oneauth.findOne({
+    models.OneAuth.findOne({
       where: {
         oneauthToken: authtoken.data.access_token
-      }
+      },
+        include: [models.User]
     }).then(function (oneauth) {
       if (oneauth !== null) {
         res.status(200).send({
           success: true,
-          token: oneauth.token
+          token: oneauth.token,
+          user: oneauth.user.name
         })
       }
       else {
@@ -40,7 +42,8 @@ route.post('/', (req, res) => {
           }).then(function (oneauthFinal) {
             res.status(201).send({
               success: true,
-              token: oneauthFinal.token
+              token: oneauthFinal.token,
+              user: user.data.firstname + " " + user.data.lastname
             })
           }).catch(function (err) {
             console.log(err);

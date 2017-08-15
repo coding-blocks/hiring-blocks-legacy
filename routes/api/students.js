@@ -10,7 +10,7 @@ router.get('/', function (req, res) {
         attributes: ['id', 'education'],
         include: [{
             model: models.User,
-            attributes: ['image', 'name']
+            attributes: ['id','image', 'name']
         }]
     }).then(function (students) {
         res.status(200).send(students.map((i) => i.get()));
@@ -33,8 +33,8 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/add', function (req, res) {
-    if (req.body.name === "" || req.body.email === "" || req.body.password === "") {
-        res.status(400).send("Insufficient Details");
+    if (!req.body.userId === true) {
+        res.status(400).send("Please login first");
     }
     models.Student.create({
         education: req.body.education,
@@ -84,6 +84,8 @@ router.put('/:id', passport.authenticate('bearer'), ensure.ensureAdmin('/'), fun
 
 });
 //TODO: Ask if this is student id or user id
+//this is user id as all the applications belong to a user and not to a student
+
 router.get('/:id/applications', passport.authenticate('bearer'), function (req, res) {
     let userId = parseInt(req.params.id);
     models.Admin.findOne({where: {id: req.user.id}}).then(function (admin) {

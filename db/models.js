@@ -45,20 +45,19 @@ const User = db.define('user', {
   contact: Sequelize.STRING,
   email: Sequelize.STRING,
   pincode: Sequelize.STRING,
-  image: Sequelize.STRING,
-  role: Sequelize.STRING
+  image: Sequelize.STRING
 });
 
-const AuthToken = db.define('authtoken', {
-  token: {
-    type: Sequelize.STRING,
-    primaryKey: true
-  },
-  role: Sequelize.STRING
-});
+// const AuthToken = db.define('authtoken', {
+//   token: {
+//     type: Sequelize.STRING,
+//     primaryKey: true
+//   },
+//   role: Sequelize.STRING
+// });
 
-AuthToken.belongsTo(User);
-User.hasMany(AuthToken);
+// AuthToken.belongsTo(User);
+// User.hasMany(AuthToken);
 
 Student.belongsTo(User);
 User.hasOne(Student);
@@ -125,7 +124,7 @@ Job.hasMany(Application);
 
 module.exports = {
   models: {
-    Student, CompanyManager, Admin, User, AuthToken,
+    Student, CompanyManager, Admin, User,
     Company, Job, Application, OneAuth
   },
   db: db

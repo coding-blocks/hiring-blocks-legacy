@@ -39,7 +39,10 @@ router.get('/:id', function (req, res) {
   models.Company.findOne({
     where: {id: companyId}
   }).then(function (company) {
-    res.status(200).send(company.get());
+    if(company)
+      res.status(200).send(company.get());
+    else
+      res.status(404).send("Could not find any company with the given id")
   }).catch(function (err) {
     console.log(err);
     res.status(500).send('Unknown Company');
@@ -126,7 +129,10 @@ router.get('/:id/jobs', function (req, res) {
     where: {companyId: companyId},
     attributes: ['title', 'location', 'salary']
   }).then(function (jobs) {
-    res.status(200).send(jobs);
+    if(jobs)
+      res.status(200).send(jobs);
+    else
+      res.status(404).send("there are presently no jobs by this company")
   }).catch(function (err) {
     console.log(err);
     res.status(500).send("Unknown company");
@@ -142,7 +148,10 @@ router.get('/:id/jobs/:jobId', function (req, res) {
       id: jobId
     }
   }).then(function (job) {
+    if(job)
     res.status(200).send(job);
+    else
+      res.status(404).send("there is no job withh the given id")
   }).catch(function (err) {
     console.log(err);
     res.status(500).send("Unknown Job");

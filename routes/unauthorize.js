@@ -5,7 +5,7 @@ const password = require('../utils/password');
 
 route.get('/', (req, res) => {
   console.log(1);
-  models.AuthToken.destroy({
+  models.OneAuth.destroy({
     where: {
       token: req.headers["authorization"].split('Bearer ')[1],
     },
