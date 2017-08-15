@@ -15,7 +15,7 @@ it("POST /users/add should add a user", function (done) {
     name: "User1",
   }).end(function (e,r) {
     r.statusCode.should.equal(201);
-    r.body.should.equal("user created");
+    r.text.should.equal("user created");
     done();
   })
 });
@@ -25,7 +25,7 @@ it("POST /users/me/student/create should add a company", function (done) {
     cbStudent: true,
   }).end(function (e,r) {
     r.statusCode.should.equal(201);
-    r.body.should.equal("Student created");
+    r.text.should.equal("Student created");
     done();
   })
 });
@@ -36,7 +36,7 @@ it("POST /users/me/companymanager/create should add a company", function (done) 
     companyName: "Coding Blocks"
   }).end(function (e,r) {
     r.statusCode.should.equal(201);
-    r.body.should.equal("Companymanager created");
+    r.text.should.equal("Companymanager created");
     done();
   })
 });

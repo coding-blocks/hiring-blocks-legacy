@@ -3,8 +3,13 @@ const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 const ensure = require('./../../auth/authutils');
 const passport = require('./../../auth/passporthandler');
+const config = require('./../../config');
 
-router.post('/add', passport.authenticate('bearer'), ensure.ensureAdmin(), function (req, res) {
+
+router.post('/add', config.DEV_MODE ? function(req,res,next){
+      req.user.id = 1;
+      next();}
+  :passport.authenticate('bearer'), ensure.ensureAdmin(), function (req, res) {
   if (req.body.name === "") {
     res.status(403).send("Insufficient Details");
   }

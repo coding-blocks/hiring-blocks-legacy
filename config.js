@@ -1,5 +1,5 @@
 config = {
-    "DEV_MODE": false
+    "DEV_MODE": true
 };
 
 module.exports = config;
