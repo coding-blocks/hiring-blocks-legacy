@@ -14,7 +14,7 @@ router.use('/users', config.DEV_MODE ? function(req,res,next){
     name: "User1"
   }).then(function (user) {
     if (user){
-      req.user = user;
+      req.user = {id :1};
       next();}
     else
       return res.status(500).send("could not create the user");
