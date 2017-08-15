@@ -4,6 +4,21 @@ const password = require('./../../utils/password');
 const passport = require('../../auth/passporthandler');
 const ensure = require('./../../auth/authutils');
 
+router.post('/add',function (req,res) {
+  models.User.create({
+    name: req.body.name
+  }).then(function (user) {
+    if (user)
+      return res.status(201).send("user created");
+    else
+      return res.status(500).send("could not create the user");
+
+  }).catch(function (err) {
+    console.log(err);
+    return res.status(500).send("could not create the user");
+  });
+})
+
 router.get('/', ensure.ensureAdmin(), function (req, res) {
     models.User.findAll().then(function (users) {
         if (users)
