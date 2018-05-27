@@ -23,6 +23,15 @@ router.use('/users', config.DEV_MODE ? function(req,res,next){
     return res.status(500).send("could not create the user");
   });}:passport.authenticate('bearer'), require('./users'));
 
+app.get('*', (req, res) => {
+  res.status(404).json({
+    "error": "404",
+    "error":{
+      "message": "You are not a manager"
+    }
+  })
+})
+
 // config.DEV_MODE ? function (req, res, next) {
 //   next();
 // } :
