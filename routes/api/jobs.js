@@ -3,12 +3,14 @@ const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 const ensure = require('./../../auth/authutils');
 const passport = require('./../../auth/passporthandler');
+const errorFunction = require('../../utils/error').errorFunction;
 
-router.post('/add', config.DEV_MODE ? function(req,res,next){
-    req.user= {id:1};
-    next();}
-  :passport.authenticate('bearer'),function (req, res) {
-    const companyId=parseInt(req.body.companyId);
+router.post('/add', config.DEV_MODE ? function (req, res, next) {
+    req.user = {id: 1};
+    next();
+  }
+  : passport.authenticate('bearer'), function (req, res) {
+  const companyId = parseInt(req.body.companyId);
 
   if (req.user) {
     models.Admin.findOne({
@@ -25,13 +27,10 @@ router.post('/add', config.DEV_MODE ? function(req,res,next){
           active: req.body.active,
           startDate: req.body.startDate,
           endDate: req.body.endDate,
-          companyId:companyId
+          companyId: companyId
         }).then(function (job) {
           res.status(201).send(job);
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send("Could not add the job")
-        })
+        }).catch(errorFunction(req, res, 500, "Could not add a job"))
 
       }
       else {
@@ -49,26 +48,17 @@ router.post('/add', config.DEV_MODE ? function(req,res,next){
               active: req.body.active,
               startDate: req.body.startDate,
               endDate: req.body.endDate,
-              companyId:companyId
+              companyId: companyId
             }).then(function (job) {
               res.status(201).send(job);
-            }).catch(function (err) {
-              console.log(err);
-              res.status(500).send("Could not add the job")
-            })
+            }).catch(errorFunction(req, res, 500, "Could not add a job"))
 
           }
           else
             res.status(401).send("Only Admins and Company Managers Allowed");
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send("Error");
-        })
+        }).catch(errorFunction(req, res, 500, "Could not find the Company Manager"))
       }
-    }).catch(function (err) {
-      console.log(err);
-      res.status(500).send("Error");
-    })
+    }).catch(errorFunction(req, res, 500, "Could not find the admin"))
   } else {
     res.status(401).send("Please login first");
   }
@@ -76,30 +66,25 @@ router.post('/add', config.DEV_MODE ? function(req,res,next){
 });
 
 router.get('/:id', function (req, res) {
-    let jobId = parseInt(req.params.id);
-    models.Job.findOne({
-        where: {id: jobId}
-    }).then(function (job) {
-        res.status(200).send(job);
-    }).catch(function (err) {
-        console.log(err);
-    })
+  let jobId = parseInt(req.params.id);
+  models.Job.findOne({
+    where: {id: jobId}
+  }).then(function (job) {
+    res.status(200).send(job);
+  }).catch(errorFunction(req, res, 500, "Could not get the job"))
 });
 
-router.post('/:id/apply', passport.authenticate('bearer'),ensure.ensureStudent,function (req, res) {
-    let jobId = parseInt(req.params.id);
+router.post('/:id/apply', passport.authenticate('bearer'), ensure.ensureStudent, function (req, res) {
+  let jobId = parseInt(req.params.id);
 
-            models.Application.create({
-                application: req.body.application,
-                status: "none",
-                userId: req.user.id,
-                jobId: jobId
-            }).then(function (application) {
-                res.status(201).send(application)
-            }).catch(function (err) {
-                console.log(err);
-                res.status(500).send("Error in submitting the application")
-            })
+  models.Application.create({
+    application: req.body.application,
+    status: "none",
+    userId: req.user.id,
+    jobId: jobId
+  }).then(function (application) {
+    res.status(201).send(application)
+  }).catch(errorFunction(req, res, 500, "Error in submitting the application"))
 });
 
 router.get('/:id/applications', passport.authenticate('bearer'), function (req, res) {
@@ -114,14 +99,16 @@ router.get('/:id/applications', passport.authenticate('bearer'), function (req, 
           return res.status(404).send({code: "404", error: {message: "No Applications submitted"}})
         }
         return res.status(200).send(applications);
-      }).catch(function (error) {
-        console.log(error);
-        res.status(500).send({code: "500", error: {message: "Database Error"}});
-      })
+      }).catch(errorFunction(req, res, 500, "Database Error"))
     } else {
-      models.Job.findOne({where: {jobId: jobId} }).then(function (job) {
-        if(job){
-          models.CompanyManager.findOne({where: {userId: req.user.id, companyId: job.comapnyId}}).then(function (companymanager) {
+      models.Job.findOne({where: {jobId: jobId}}).then(function (job) {
+        if (job) {
+          models.CompanyManager.findOne({
+            where: {
+              userId: req.user.id,
+              companyId: job.comapnyId
+            }
+          }).then(function (companymanager) {
             if (companymanager) {
               models.Application.findAll({
                 where: {jobId: jobId},
@@ -131,36 +118,29 @@ router.get('/:id/applications', passport.authenticate('bearer'), function (req, 
                   return res.status(404).send({code: "404", error: {message: "No Applications submitted"}})
                 }
                 return res.status(200).send(applications);
-              }).catch(function (error) {
-                console.log(error);
-                res.status(500).send({code: "500", error: {message: "Database Error"}});
-              })
+              }).catch(errorFunction(req, res, 500, "Database Error"))
             } else {
-              res.status(401).send({code: "401", error: {message: "Only companymanagers of this job's company are allowed"}});
+              res.status(401).send({
+                code: "401",
+                error: {message: "Only companymanagers of this job's company are allowed"}
+              });
             }
-          }).catch(function (error) {
-            console.log(error);
-            res.status(500).send({code: "500", error: {message: "Database Error"}});
-          })
-        }else{
+          }).catch(errorFunction(req, res, 500, "Database Error"))
+        } else {
           res.status(401).send({code: "401", error: {message: "this job does not exist"}});
         }
-      }).catch(function (err) {
-        console.log(err)
-      })
+      }).catch(errorFunction(req, res, 500, "Could not get the job"))
 
     }
   })
 });
 
 router.get('/', function (req, res) {
-    models.Job.findAll({
-        where: {jobType: req.query.status}
-    }).then(function (jobs) {
-        res.status(200).send(jobs);
-    }).catch(function (err) {
-        console.log(err);
-    })
+  models.Job.findAll({
+    where: {jobType: req.query.status}
+  }).then(function (jobs) {
+    res.status(200).send(jobs);
+  }).catch(errorFunction(req, res, 500, "Database Error"))
 });
 
 module.exports = router;

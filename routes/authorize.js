@@ -4,6 +4,7 @@ const uid = require('uid2');
 const password = require('../utils/password');
 const axios = require('axios');
 const secrets = require('./../secrets.json');
+const errorFunction = require('../utils/error').errorFunction;
 
 route.post('/', (req, res) => {
   axios.post('https://account.codingblocks.com/oauth/token', {
@@ -17,7 +18,7 @@ route.post('/', (req, res) => {
       where: {
         oneauthToken: authtoken.data.access_token
       },
-        include: [models.User]
+      include: [models.User]
     }).then(function (oneauth) {
       if (oneauth !== null) {
         res.status(200).send({
@@ -45,49 +46,11 @@ route.post('/', (req, res) => {
               token: oneauthFinal.token,
               user: user.data.firstname + " " + user.data.lastname
             })
-          }).catch(function (err) {
-            console.log(err);
-            res.status(500).send({
-              success: false
-              , code: "500"
-              , error: {
-                message: "Could not create in Oneauth Table(Internal Server Error)."
-              }
-            })
-          })
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send({
-            success: false
-            , code: "500"
-            , error: {
-              message: "Could not get details from Oneauth API(Internal Server Error)."
-            }
-          })
-        })
-        //
-        //
+          }).catch(errorFunction(req, res, 500, "Could not create in Oneauth Table(Internal Server Error)."))
+        }).catch(errorFunction(req, res, 500, "Could not get details from Oneauth API(Internal Server Error)."))
       }
-    }).catch(function (err) {
-      console.log(err);
-      res.status(500).send({
-        success: false
-        , code: "500"
-        , error: {
-          message: "Could not find in Oneauth(Internal Server Error)."
-        }
-      })
-    })
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send({
-      success: false
-      , code: "500"
-      , error: {
-        message: "Could not post data to Oneauth API(Internal Server Error)."
-      }
-    })
-  })
+    }).catch(errorFunction(req, res, 500, "Could not find in Oneauth(Internal Server Error)."))
+  }).catch(errorFunction(req, res, 500, "Could not post data to Oneauth API(Internal Server Error)."))
 })
 
 module.exports = route;
