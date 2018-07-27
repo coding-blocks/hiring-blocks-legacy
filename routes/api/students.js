@@ -3,6 +3,7 @@ const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 const passport = require('./../../auth/passporthandler');
 const ensure = require('./../../auth/authutils');
+const errorFunction = require('../../utils/error').errorFunction;
 
 
 router.get('/', function (req, res) {
@@ -14,10 +15,7 @@ router.get('/', function (req, res) {
     }]
   }).then(function (students) {
     res.status(200).send(students.map((i) => i.get()));
-  }).catch(function (error) {
-    res.status(500).send({code: "500", error: {message: "Could not get all the students."}});
-    console.log(error);
-  })
+  }).catch(errorFunction(req, res, 500, "Could not get all the students"))
 });
 
 router.get('/:id', function (req, res) {
@@ -26,10 +24,7 @@ router.get('/:id', function (req, res) {
     include: models.Student
   }).then(function (user) {
     res.status(200).send(user);
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send({code: "500", error: {message: "Could not get the details of the student."}});
-  })
+  }).catch(errorFunction(req, res, 500, "Could not get the details of the student"))
 });
 
 router.post('/add', async function (req, res) {
@@ -57,10 +52,7 @@ router.post('/add', async function (req, res) {
       return res.status(500).send("Could not create the student.");
 
     return res.status(201).send("Student created");
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send("Could not create the student.");
-  })
+  }).catch(errorFunction(req, res, 500, "Could not create the student"))
 
 });
 
@@ -86,10 +78,7 @@ router.put('/:id', config.DEV_MODE ? function (req, res, next) {
       return res.status(404).send({code: "404", error: {message: "Could not find the student"}})
     }
     return res.status(200).send({success: true, student});
-  }).catch(function (err) {
-    console.log(err);
-    return res.status(500).send({code: "500", error: {message: "Database Error"}})
-  })
+  }).catch(errorFunction(req, res, 500, "Database Error"))
 
 });
 //TODO: Ask if this is student id or user id
@@ -107,10 +96,7 @@ router.get('/:id/applications', passport.authenticate('bearer'), function (req, 
           return res.status(404).send({code: "404", error: {message: "No Applications submitted"}})
         }
         return res.status(200).send(applications);
-      }).catch(function (error) {
-        console.log(error);
-        res.status(500).send({code: "500", error: {message: "Database Error"}});
-      })
+      }).catch(errorFunction(req, res, 500, "Database Error"))
     } else {
       models.CompanyManager.findOne({where: {userId: req.user.id}}).then(function (companymanager) {
         if (companymanager) {
@@ -129,17 +115,11 @@ router.get('/:id/applications', passport.authenticate('bearer'), function (req, 
               return res.status(404).send({code: "404", error: {message: "No Applications submitted"}})
             }
             return res.status(200).send(applications);
-          }).catch(function (error) {
-            console.log(error);
-            res.status(500).send({code: "500", error: {message: "Database Error"}});
-          })
+          }).catch(errorFunction(req, res, 500, "Database Error"))
         } else {
           res.status(401).send({code: "401", error: {message: "You are not allowed"}});
         }
-      }).catch(function (error) {
-        console.log(error);
-        res.status(500).send({code: "500", error: {message: "Database Error"}});
-      })
+      }).catch(errorFunction(req, res, 500, "Database Error"))
     }
   })
 });

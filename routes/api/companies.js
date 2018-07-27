@@ -4,6 +4,7 @@ const password = require('./../../utils/password');
 const ensure = require('./../../auth/authutils');
 const passport = require('./../../auth/passporthandler');
 const config = require('./../../config');
+const errorFunction = require('../../utils/error').errorFunction;
 
 
 router.post('/add', config.DEV_MODE ? function(req,res,next){
@@ -22,10 +23,7 @@ router.post('/add', config.DEV_MODE ? function(req,res,next){
     contactNumber: req.body.contactNumber,
   }).then(function (company) {
     res.status(201).send(company.get());
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send("Could not create company");
-  })
+  }).catch(errorFunction(req, res, 500, "Could not create company."))
 });
 
 router.get('/', function (req, res) {
@@ -33,10 +31,7 @@ router.get('/', function (req, res) {
     attributes: ['id', 'name', 'locations', 'logo']
   }).then(function (companies) {
     res.status(200).send(companies);
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send("Could not get companies");
-  })
+  }).catch(errorFunction(req, res, 500, "Could not get companies."))
 });
 
 router.get('/:id', function (req, res) {
@@ -48,10 +43,7 @@ router.get('/:id', function (req, res) {
       res.status(200).send(company.get());
     else
       res.status(404).send("Could not find any company with the given id")
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send('Unknown Company');
-  })
+  }).catch(errorFunction(req, res, 500, "Unknown Company"))
 });
 
 router.put('/:id', passport.authenticate('bearer'), function (req, res) {
@@ -82,10 +74,7 @@ router.put('/:id', passport.authenticate('bearer'), function (req, res) {
         }).then(function (rows) {
           // const company = rows[1][0].get();
           res.status(200).send("Updated");
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send("Error");
-        });
+        }).catch(errorFunction(req, res, 500, "Could not update the company."));
 
       }
       else {
@@ -106,21 +95,12 @@ router.put('/:id', passport.authenticate('bearer'), function (req, res) {
             }).then(function (rows) {
               // const company = rows[1][0].get();
               res.status(200).send("Updated");
-            }).catch(function (err) {
-              console.log(err);
-              res.status(500).send("Error");
-            });
+            }).catch(errorFunction(req, res, 500, "Could not update the company."));
           else
             res.status(401).send("Only Admins and Company Managers Allowed");
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send("Error");
-        })
+        }).catch(errorFunction(req, res, 500, "Could not find the company manager."))
       }
-    }).catch(function (err) {
-      console.log(err);
-      res.status(500).send("Error");
-    })
+    }).catch(errorFunction(req, res, 500, "Could not find the Admin."))
   } else {
     res.status(401).send("Please login first");
   }
@@ -138,10 +118,7 @@ router.get('/:id/jobs', function (req, res) {
       res.status(200).send(jobs);
     else
       res.status(404).send("there are presently no jobs by this company")
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send("Unknown company");
-  })
+  }).catch(errorFunction(req, res, 500, "Unknown Company."))
 });
 
 router.get('/:id/jobs/:jobId', function (req, res) {
@@ -157,10 +134,7 @@ router.get('/:id/jobs/:jobId', function (req, res) {
     res.status(200).send(job);
     else
       res.status(404).send("there is no job withh the given id")
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).send("Unknown Job");
-  })
+  }).catch(errorFunction(req, res, 500, "Unknown Job."))
 });
 
 router.get('/:id/applications', passport.authenticate('bearer'), function (req, res) {
@@ -180,10 +154,7 @@ router.get('/:id/applications', passport.authenticate('bearer'), function (req, 
             models.Job]
         }).then(function (applications) {
           res.status(200).send(applications);
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send("Unknown company");
-        });
+        }).catch(errorFunction(req, res, 500, "Unknown Company"));
 
       }
       else {
@@ -200,22 +171,13 @@ router.get('/:id/applications', passport.authenticate('bearer'), function (req, 
                 models.Job]
             }).then(function (applications) {
               res.status(200).send(applications);
-            }).catch(function (err) {
-              console.log(err);
-              res.status(500).send("Unknown company");
-            });
+            }).catch(errorFunction(req, res, 500, "Unknown Company"));
           }
           else
             res.status(401).send("Only Admins and Company Managers Allowed");
-        }).catch(function (err) {
-          console.log(err);
-          res.status(500).send("Error");
-        })
+        }).catch(errorFunction(req, res, 500, "Unknown CompanyManager"))
       }
-    }).catch(function (err) {
-      console.log(err);
-      res.status(500).send("Error");
-    })
+    }).catch(errorFunction(req, res, 500, "Unknown Admin"))
   } else {
     res.status(401).send("Please login first");
   }

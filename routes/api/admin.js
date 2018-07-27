@@ -3,6 +3,8 @@ const models = require('./../../db/models').models;
 const password = require('./../../utils/password');
 const ensure = require('./../../auth/authutils');
 const passport = require('./../../auth/passporthandler');
+const errorFunction = require('../../utils/error').errorFunction;
+
 
 //FIXME : Incorrect
 // fixed
@@ -19,10 +21,7 @@ router.post('/add', passport.authenticate('bearer'),ensure.ensureAdmin,function 
                 res.status(201).send("Admin created");
             else
                 res.status(500).send("Could not create the Admin.");
-        }).catch(function (err) {
-            console.log(err);
-            res.status(500).send("Could not create the Admin.");
-        })
+        }).catch(errorFunction(req, res, 500, "Could not create the Admin."))
     })
 
 
@@ -33,10 +32,7 @@ router.get('/:id', passport.authenticate('bearer'),ensure.ensureAdmin,function (
         include: models.Admin
     }).then(function (user) {
         res.status(200).send(user);
-    }).catch(function (err) {
-        console.log(err);
-        res.status(500).send('Unknown Admin');
-    })
+    }).catch(errorFunction(req, res, 500, "Unknown Admin"))
 });
 
 router.put('/:id/edit', passport.authenticate('bearer'),ensure.ensureAdmin,function (req, res) {
@@ -49,9 +45,7 @@ router.put('/:id/edit', passport.authenticate('bearer'),ensure.ensureAdmin,funct
                 res.status(200).send(admin);
             }
             return res.status(200).send({success: false});
-        }).catch(function (err) {
-            return res.status(500).send({success: false});
-        })
+        }).catch(errorFunction(req, res, 500, "Server Error"))
 });
 
 router.get('/', passport.authenticate('bearer'),ensure.ensureAdmin,function (req, res) {
@@ -59,9 +53,7 @@ router.get('/', passport.authenticate('bearer'),ensure.ensureAdmin,function (req
         include: models.User
     }).then(function (admins) {
         res.status(200).send(admins);
-    }).catch(function (error) {
-        console.log(error);
-    })
+    }).catch(errorFunction(req, res, 500, "Could not get the admins(Server error)"))
 });
 
 module.exports = router;
